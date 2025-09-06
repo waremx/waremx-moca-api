@@ -1,2 +1,19 @@
-greeting:
-  message: "hello"
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: ymoyamac
+    password: ymoyamac
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/mocadev
+
+  hibernate-orm:
+    log:
+      sql: true
+      format-sql: true
+
+  log:
+    category:
+      "org.hibernate.SQL":
+        level: DEBUG
+      "org.hibernate.type.descriptor.sql.BasicBinder":
+        level: TRACE
