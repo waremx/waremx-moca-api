@@ -1,8 +1,6 @@
 package com.waremx.common.core.patterns;
 
-
 import com.waremx.common.mox.uni.Context;
-import com.waremx.common.mox.listeners.Observe;
 
 public abstract class Handler<T, E> {
     private Handler<T, E> next;
@@ -12,16 +10,16 @@ public abstract class Handler<T, E> {
 
     @SafeVarargs
     public final static <T, E> Handler<T, E> link(Handler<T, E> first, Handler<T, E> ...handlers) {
-        Handler<T, E> head = first;
+        Handler<T, E> current = first;
         for(Handler<T, E> handler: handlers) {
-            head.next = handler;
-            head = handler;
+            current.next = handler;
+            current = handler;
         }
         return first;
     }
 
-    public final <U> Observe<U> build(String observer) {
-        return this.context.getObserve(observer);
+    public final Context build() {
+        return this.context;
     }
 
     protected final Handler<T, E> checkNext(final Context<T, E> context) {
@@ -29,6 +27,7 @@ public abstract class Handler<T, E> {
             this.context = context;
             return this;
         }
+        this.context = context;
         return this.next.execute(context);
     }
 }

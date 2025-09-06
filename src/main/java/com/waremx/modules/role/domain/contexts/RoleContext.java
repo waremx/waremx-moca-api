@@ -5,6 +5,7 @@ import com.waremx.modules.role.domain.entities.Role;
 
 import java.util.Optional;
 
+
 public class RoleContext implements Observe<Optional<Role>> {
 
     private Optional<Role> result;

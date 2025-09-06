@@ -101,6 +101,10 @@ public class Context<T, E> implements Subject {
         return this.err;
     }
 
+    public final E err() {
+        return this.err;
+    }
+
     /**
      * Subscribes a listener to a specific event.
      * Replaces the listener if the event was already subscribed.

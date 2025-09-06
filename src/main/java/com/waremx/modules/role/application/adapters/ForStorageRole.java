@@ -15,8 +15,6 @@ import io.vavr.control.Either;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import java.util.Optional;
-
 @ApplicationScoped
 public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
 
@@ -31,14 +29,18 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
         context.set(Prop.bind("action", "create_role"));
         context.set(Prop.bind("create_role_dto", createRoleDto));
 
-        return Handler.link(
+        Context last = Handler.link(
                 new CreateRoleHandler(roleRepository)
         )
                 .execute(context)
-                .<Optional<Role>>build("create_role")
-                .get()
+                .build();
+
+        if (last == null) {
+            return Either.left(context.err());
+        }
+
+        return roleContext.get()
                 .<Either<MocaErrCodes, RoleDto>>map(role -> Either.right(RoleDto.from(role)))
                 .orElseGet(() -> Either.left(MocaErrCodes.ROLE_ERROR_TO_CREATE));
-
     }
 }

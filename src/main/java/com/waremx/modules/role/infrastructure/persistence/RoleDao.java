@@ -6,6 +6,7 @@ import com.waremx.modules.role.infrastructure.persistence.jpa.RoleJpa;
 import com.waremx.modules.role.infrastructure.persistence.jpa.RoleJpaRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import java.util.Optional;
 
@@ -15,11 +16,14 @@ public class RoleDao implements RoleRepository {
     @Inject
     RoleJpaRepository roleJpaRepository;
 
+    @Transactional
     @Override
     public Optional<Role> create(Role role) {
-        return Optional.ofNullable(
-                this.roleJpaRepository.saveAndFlush(RoleJpa.fromEntity(role))
-                        .toEntity()
-        );
+        try {
+            RoleJpa created = this.roleJpaRepository.saveAndFlush(RoleJpa.fromEntity(role));
+            return Optional.ofNullable(created.toEntity());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

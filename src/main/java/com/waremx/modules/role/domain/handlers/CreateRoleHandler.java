@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -21,6 +22,10 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
 
     @Override
     public Handler<Role, MocaErrCodes> execute(Context<Role, MocaErrCodes> context) {
+
+        if (Objects.isNull(context)) {
+            return checkNext(null);
+        }
 
         String roleName = context.<CreateRoleDto>get("create_role_dto").get().getRoleName();
         LocalDateTime now = LocalDateTime.now();
@@ -35,12 +40,13 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
         Optional<Role> created = this.roleRepository.create(newRole);
 
         if (created.isEmpty()) {
-            LOGGER.info("ROLE NOT CREATED");
+            LOGGER.info("[ERROR]: Error to create role \"{}\" failed", roleName);
+            context.err(MocaErrCodes.ROLE_ALREADY_EXISTS);
+            context.emit("create_role", Optional.empty());
             return checkNext(null);
         }
 
         context.emit("create_role", created);
-
         return checkNext(context);
     }
 }
