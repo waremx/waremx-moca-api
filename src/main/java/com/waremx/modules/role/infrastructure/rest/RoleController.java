@@ -1,11 +1,14 @@
 package com.waremx.modules.role.infrastructure.rest;
 
 import com.waremx.common.application.services.CreateService;
+import com.waremx.common.core.entities.MocaResponseCodes;
+import com.waremx.common.core.entities.MocaResponseMapper;
 import com.waremx.common.core.errors.MocaErr;
 import com.waremx.common.core.errors.MocaErrApiResponse;
 import com.waremx.modules.role.infrastructure.rest.dtos.CreateRoleDto;
 import com.waremx.modules.role.infrastructure.rest.dtos.RoleDto;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -61,7 +64,9 @@ public class RoleController {
     )
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create() {
-        return null;
+    public Response create(@Valid CreateRoleDto createRoleDto) {
+        return this.createRoleService.create(createRoleDto)
+                .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.CREATE_ROLE, roleDto))
+                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "Failed to create role"));
     }
 }

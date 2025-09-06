@@ -3,9 +3,9 @@ package com.waremx.common.core.entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.aey.common.core.errors.MocaErr;
-import com.aey.common.core.errors.MocaErrResponse;
-import com.aey.common.core.errors.MocaErrCodes;
+import com.waremx.common.core.errors.MocaErr;
+import com.waremx.common.core.errors.MocaErrResponse;
+import com.waremx.common.core.errors.MocaErrCodes;
 
 import jakarta.ws.rs.core.Response;
 

@@ -1,7 +1,8 @@
-package com.aey.common.core.patterns;
+package com.waremx.common.core.patterns;
 
-import com.aey.mox.listeners.Observe;
-import com.aey.mox.uni.Context;
+
+import com.waremx.common.mox.uni.Context;
+import com.waremx.common.mox.listeners.Observe;
 
 public abstract class Handler<T, E> {
     private Handler<T, E> next;
