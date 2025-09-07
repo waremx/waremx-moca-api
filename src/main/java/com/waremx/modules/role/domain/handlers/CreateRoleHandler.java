@@ -3,6 +3,8 @@ package com.waremx.modules.role.domain.handlers;
 import com.waremx.common.core.errors.MocaErrCodes;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
+import com.waremx.modules.role.domain.enums.RoleEvents;
+import com.waremx.modules.role.domain.enums.RoleKeys;
 import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.common.core.patterns.Handler;
 import com.waremx.modules.role.infrastructure.rest.dtos.CreateRoleDto;
@@ -24,10 +26,11 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
     public Handler<Role, MocaErrCodes> execute(Context<Role, MocaErrCodes> context) {
 
         if (Objects.isNull(context)) {
+            LOGGER.info("The [CreateRoleHandler] handler was not executed");
             return checkNext(null);
         }
 
-        CreateRoleDto createRoleDto = context.<CreateRoleDto>get("create_role_dto").orElseThrow();
+        CreateRoleDto createRoleDto = context.<CreateRoleDto>get(RoleKeys.IN_CREATE_ROLE_DTO.getKey()).orElseThrow();
         LocalDateTime now = LocalDateTime.now();
 
         Role newRole = Role.builder()
@@ -46,12 +49,12 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
         if (created.isEmpty()) {
             LOGGER.info("[ERROR]: Error to create role \"{}\" failed", createRoleDto);
             context.err(MocaErrCodes.ROLE_ERROR_TO_CREATE);
-            context.emit("create_role", Optional.empty());
+            context.emit(RoleEvents.EVENT_CREATE_ROLE.getEvent(), Optional.empty());
             return checkNext(null);
         }
 
         LOGGER.info("[SUCCESS]: Role \"{}\" created", createRoleDto);
-        context.emit("create_role", created);
+        context.emit(RoleEvents.EVENT_CREATE_ROLE.getEvent(), created);
         return checkNext(context);
     }
 }

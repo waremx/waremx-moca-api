@@ -17,11 +17,12 @@ public enum MocaErrCodes {
 
     //Role Error Codes
     ROLE_NOT_FOUND("MOCA-ROL-ERR001", 404, "Not Found", "Role not found"),
-    ROLE_EMPTY_LIST("MOCA-ROL-ERR005", 404, "Not Found", "Request completed successfully, but no records were found."),
     ROLE_NOT_AVAILABLE("MOCA-ROL-ERR002", 400, "Bad Request", "Role not available"),
     ROLE_ERROR_TO_CREATE("MOCA-ROL-ERR003", 500, "Internal Server Error", "Oops... Something went wrong, role could not be created"),
-    ROLE_ERROR_TO_UPDATE("MOCA-ROL-ERR006", 500, "Internal Server Error", "Oops... Something went wrong, role could not be updated"),
     ROLE_ALREADY_EXISTS("MOCA-ROL-ERR004", 400, "Bad Request", "Oops... Something went wrong, this role already exists"),
+    ROLE_EMPTY_LIST("MOCA-ROL-ERR005", 404, "Not Found", "Request completed successfully, but no records were found."),
+    ROLE_ERROR_TO_UPDATE("MOCA-ROL-ERR006", 500, "Internal Server Error", "Oops... Something went wrong, role could not be updated"),
+    ROLE_BAD_REQUEST_TO_CREATE("MOCA-ROL-ERR007", 400, "Bad Request", "The role name must end with _ROLE"),
 
     ;
 
