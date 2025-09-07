@@ -1,7 +1,7 @@
 package com.waremx.modules.role.infrastructure.rest.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.waremx.modules.role.domain.entities.Role;
+import com.waremx.modules.role.domain.objects.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 public class RoleDto {
 
     @JsonProperty
-    private Short roleId;
+    private String name;
 
     @JsonProperty
-    private String roleName;
+    private String displayName;
 
     @JsonProperty
     private LocalDateTime createdAt;
@@ -30,13 +30,17 @@ public class RoleDto {
     @JsonProperty
     private Boolean isActive;
 
+    @JsonProperty
+    private Boolean isProtected;
+
     public static RoleDto from(Role role) {
         return RoleDto.builder()
-                .roleId(role.getRoleId())
-                .roleName(role.getRoleName())
+                .name(role.getName())
+                .displayName(role.getDisplayName())
                 .createdAt(role.getCreatedAt())
                 .updatedAt(role.getUpdatedAt())
                 .isActive(role.getIsActive())
+                .isProtected(role.getIsProtected())
                 .build();
     }
 }

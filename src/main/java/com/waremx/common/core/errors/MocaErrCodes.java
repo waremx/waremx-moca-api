@@ -11,7 +11,7 @@ public enum MocaErrCodes {
     UNAUTHORIZED("MOCA-SYS-ERR005", 401, "Unauthorized", "Not valid credentials, check email or password"),
     NOT_FOUND("MOCA-SYS-ERR006", 404, "Not Found", "Resource not found"),
     RESOURCE_NOT_AVAILABLE("MOCA-SYS-ERR007", 404, "Not Found", "Resource not available"),
-    ERROR("MOCA-SYS-ERR007", 500, "Internal Server Error", "Oops... Something went wrong. An unexpected error occurred. Please try again later."),
+    INTERNAL_SERVER_ERROR("MOCA-SYS-ERR007", 500, "Internal Server Error", "Oops... Something went wrong. An unexpected error occurred. Please try again later."),
     ERROR_DB("MOCA-SYS-ERR008", 500, "Internal Server Error", "Oops... Something went wrong. Unable to process the request due to a database failure."),
     ERROR_NULL("MOCA-SYS-ERR009", 500, "Internal Server Error", "Oops... Something went wrong. Unexpected null value encountered while processing request."),
 

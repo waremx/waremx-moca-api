@@ -1,6 +1,8 @@
-package com.waremx.modules.role.infrastructure.rest;
+package com.waremx.modules.role.infrastructure.rest.controllers;
 
 import com.waremx.common.application.services.CreateService;
+import com.waremx.common.application.services.GetByService;
+import com.waremx.common.core.entities.MocaApiResponse;
 import com.waremx.common.core.entities.MocaResponseCodes;
 import com.waremx.common.core.entities.MocaResponseMapper;
 import com.waremx.common.core.errors.MocaErr;
@@ -9,10 +11,7 @@ import com.waremx.modules.role.infrastructure.rest.dtos.CreateRoleDto;
 import com.waremx.modules.role.infrastructure.rest.dtos.RoleDto;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -28,38 +27,46 @@ public class RoleController {
     @Inject
     private CreateService<CreateRoleDto, RoleDto> createRoleService;
 
+    @Inject
+    private GetByService<String, RoleDto> getRoleByNameService;
+
     @POST()
     @Path("/create")
     @Operation(summary = "Create new role")
     @APIResponse(
-            responseCode = "200",
-            description = "Operation completed successfully"
+            responseCode = "201",
+            description = "Operation completed successfully."
     )
     @APIResponse(
             responseCode = "400",
             description = "Invalid request format. Please check the request body",
-            content = @Content(schema = @Schema(implementation = MocaErr.class),
+            content = @Content(
+                    schema = @Schema(implementation = MocaErr.class),
                     examples = {
                             @ExampleObject(value = MocaErrApiResponse.ALREADY_EXISTS),
-                    })
+                    }
+            )
     )
     @APIResponse(
             responseCode = "500",
             description = "Error to create",
-            content = @Content(schema = @Schema(implementation = MocaErr.class),
+            content = @Content(
+                    schema = @Schema(implementation = MocaErr.class),
                     examples = {
                             @ExampleObject(value = MocaErrApiResponse.ERROR_TO_CREATE),
-                    })
+                    }
+            )
     )
     @RequestBody(
             description = "Role to create",
-            required = true,
             content = @Content(
-                    schema = @Schema(implementation = CreateRoleDto.class),
-                    examples = @ExampleObject(
-                            name = "Example Role",
-                            value = "{ \"roleName\": \"SOMETHING_ROLE\" }"
-                    )
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(
+                                    name = "Role Example",
+                                    value = MocaApiResponse.INSERT
+                            )
+                    }
             )
     )
     @Consumes(MediaType.APPLICATION_JSON)
@@ -67,6 +74,16 @@ public class RoleController {
     public Response create(@Valid CreateRoleDto createRoleDto) {
         return this.createRoleService.create(createRoleDto)
                 .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.CREATE_ROLE, roleDto))
-                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "Failed to create role"));
+                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/create"));
+    }
+
+    @GET
+    @Path("/{name}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response get(@PathParam("name") String name) {
+        return this.getRoleByNameService.getByService(name)
+                .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.CREATE_ROLE, roleDto))
+                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/" + name));
     }
 }

@@ -1,7 +1,7 @@
 package com.waremx.modules.role.domain.contexts;
 
 import com.waremx.common.mox.listeners.Observe;
-import com.waremx.modules.role.domain.entities.Role;
+import com.waremx.modules.role.domain.objects.Role;
 
 import java.util.Optional;
 
