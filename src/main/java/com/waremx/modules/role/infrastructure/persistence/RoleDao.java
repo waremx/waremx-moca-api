@@ -1,7 +1,7 @@
 package com.waremx.modules.role.infrastructure.persistence;
 
 import com.waremx.modules.role.application.repositories.RoleRepository;
-import com.waremx.modules.role.domain.entities.Role;
+import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.modules.role.infrastructure.persistence.jpa.RoleJpa;
 import com.waremx.modules.role.infrastructure.persistence.jpa.RoleJpaRepository;
 import jakarta.enterprise.context.ApplicationScoped;

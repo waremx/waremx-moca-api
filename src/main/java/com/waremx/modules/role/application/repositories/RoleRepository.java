@@ -1,6 +1,6 @@
 package com.waremx.modules.role.application.repositories;
 
-import com.waremx.modules.role.domain.entities.Role;
+import com.waremx.modules.role.domain.objects.Role;
 
 import java.util.Optional;
 

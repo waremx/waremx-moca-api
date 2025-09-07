@@ -7,13 +7,15 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.entities.Role;
+import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.modules.role.domain.handlers.CreateRoleHandler;
 import com.waremx.modules.role.infrastructure.rest.dtos.CreateRoleDto;
 import com.waremx.modules.role.infrastructure.rest.dtos.RoleDto;
 import io.vavr.control.Either;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import java.util.Objects;
 
 @ApplicationScoped
 public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
@@ -35,7 +37,7 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
                 .execute(context)
                 .build();
 
-        if (last == null) {
+        if (Objects.isNull(last)) {
             return Either.left(context.err());
         }
 

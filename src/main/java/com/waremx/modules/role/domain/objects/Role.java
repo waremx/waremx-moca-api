@@ -1,4 +1,4 @@
-package com.waremx.modules.role.domain.entities;
+package com.waremx.modules.role.domain.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +13,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Role {
     private Short roleId;
-    private String roleName;
+    private String name;
+    private String displayName;
+    private String createdBy;
+    private String updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean isActive;
+    private Boolean isProtected;
 }

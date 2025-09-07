@@ -1,4 +1,4 @@
-package com.waremx.modules.role.infrastructure.rest;
+package com.waremx.modules.role.infrastructure.rest.controllers;
 
 import com.waremx.common.application.services.CreateService;
 import com.waremx.common.core.entities.MocaResponseCodes;

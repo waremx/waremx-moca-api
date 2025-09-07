@@ -12,5 +12,14 @@ public class CreateRoleDto {
     @NotEmpty(message = "Role name can not be empty")
     @NotNull
     @JsonProperty
-    private String roleName;
+    private String name;
+
+    @NotBlank(message = "Display name is mandatory")
+    @NotEmpty(message = "Display name can not be empty")
+    @NotNull
+    @JsonProperty
+    private String displayName;
+
+    @JsonProperty
+    private String isProtected;
 }
