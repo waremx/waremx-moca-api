@@ -30,11 +30,20 @@ public class GetRoleByNameHandler extends Handler<Role, MocaErrCodes> {
         }
 
         String name = context.<String>get(RoleKeys.IN_ROLE_NAME.getKey()).orElseThrow();
+        String action = context.<String>get(RoleEvents.ACTION.getEvent())
+                .orElse(RoleEvents.EVENT_CREATE_ROLE.getEvent());
 
         Optional<Role> found = this.roleRepository.findRoleByName(name);
 
-        if (found.isEmpty()) {
-            LOGGER.info("[ERROR]: Role not found with name: {}", name);
+        if (found.isPresent() && action.equals(RoleEvents.EVENT_CREATE_ROLE.getEvent())) {
+            LOGGER.error("[ERROR]: This role already exists: {}", name);
+            context.err(MocaErrCodes.ROLE_ALREADY_EXISTS);
+            context.emit(RoleEvents.EVENT_CREATE_ROLE.getEvent(), Optional.empty());
+            return checkNext(null);
+        }
+
+        if (found.isEmpty() && action.equals(RoleEvents.EVENT_GET_ROLE_BY.getEvent())) {
+            LOGGER.error("[ERROR]: Role not found with name: {}", name);
             context.err(MocaErrCodes.ROLE_NOT_FOUND);
             context.emit(RoleEvents.EVENT_GET_ROLE_BY.getEvent(), Optional.empty());
             return checkNext(null);

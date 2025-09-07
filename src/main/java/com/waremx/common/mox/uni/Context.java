@@ -4,6 +4,7 @@ package com.waremx.common.mox.uni;
 import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.listeners.Subject;
 import com.waremx.common.mox.listeners.Observe;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.Optional;
  * @author
  * @since 1.0
  */
+@ToString
 public class Context<T, E> implements Subject {
     private final Map<String, Prop<?>> props = new HashMap<>();
     private final Map<String, Observe> listeners = new HashMap<>();

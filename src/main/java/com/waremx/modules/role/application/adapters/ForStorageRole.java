@@ -10,6 +10,7 @@ import com.waremx.modules.role.domain.contexts.RoleContext;
 import com.waremx.modules.role.domain.enums.RoleEvents;
 import com.waremx.modules.role.domain.enums.RoleKeys;
 import com.waremx.modules.role.domain.handlers.FilterInputHandler;
+import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
 import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.modules.role.domain.handlers.CreateRoleHandler;
 import com.waremx.modules.role.infrastructure.rest.dtos.CreateRoleDto;
@@ -32,12 +33,13 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
         Context<Role, MocaErrCodes> context = new Context<>();
         RoleContext roleContext = new RoleContext();
         context.subscribe(event, roleContext);
-        context.set(Prop.bind(RoleKeys.ACTION.getKey(), event));
+        context.set(Prop.bind(RoleEvents.ACTION.getEvent(), event));
         context.set(Prop.bind(RoleKeys.IN_CREATE_ROLE_DTO.getKey(), createRoleDto));
         context.set(Prop.bind(RoleKeys.IN_ROLE_NAME.getKey(), createRoleDto.getName()));
 
         Context last = Handler.link(
                 new FilterInputHandler(event),
+                new GetRoleByNameHandler(roleRepository),
                 new CreateRoleHandler(roleRepository)
         )
                 .execute(context)
