@@ -50,6 +50,7 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
             return checkNext(null);
         }
 
+        LOGGER.info("[SUCCESS]: Role \"{}\" created", createRoleDto);
         context.emit("create_role", created);
         return checkNext(context);
     }

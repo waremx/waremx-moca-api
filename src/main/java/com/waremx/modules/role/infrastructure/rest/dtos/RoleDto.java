@@ -16,19 +16,10 @@ import java.time.LocalDateTime;
 public class RoleDto {
 
     @JsonProperty
-    private Short roleId;
-
-    @JsonProperty
     private String name;
 
     @JsonProperty
     private String displayName;
-
-    @JsonProperty
-    private String createdBy;
-
-    @JsonProperty
-    private String updatedBy;
 
     @JsonProperty
     private LocalDateTime createdAt;
@@ -44,11 +35,8 @@ public class RoleDto {
 
     public static RoleDto from(Role role) {
         return RoleDto.builder()
-                .roleId(role.getRoleId())
                 .name(role.getName())
                 .displayName(role.getDisplayName())
-                .createdBy(role.getCreatedBy())
-                .updatedBy(role.getUpdatedBy())
                 .createdAt(role.getCreatedAt())
                 .updatedAt(role.getUpdatedAt())
                 .isActive(role.getIsActive())

@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface RoleRepository {
     Optional<Role> create(Role role);
+    Optional<Role> findRoleByName(String name);
 }

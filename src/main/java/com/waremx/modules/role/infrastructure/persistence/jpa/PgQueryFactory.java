@@ -15,17 +15,19 @@ public class PgQueryFactory {
 
     public static  final String PARAM_ROLE_LIMIT = "limit";
     public static  final String PARAM_ROLE_OFFSET = "offset";
-    public static  final String PARAM_ROLE_NAME = "roleName";
+    public static  final String PARAM_ROLE_NAME = "name";
 
     public static final String GET_ROLE_BY_NAME = "select role_id as roleId, " +
-            "role_tx_name as roleName, " +
-            "role_tx_display_name as roleDisplayName, " +
+            "role_tx_name as name, " +
+            "role_tx_display_name as displayName, " +
+            "role_tx_created_by as createdBy, " +
+            "role_tx_updated_by as updatedBy, " +
             "role_dt_created_at as createdAt, " +
             "role_dt_updated_at as updatedAt, " +
-            "role_st_is_active as isActive " +
+            "role_st_is_active as isActive, " +
             "role_st_is_protected as isProtected " +
-            "from t_moca_roles " +
-            "where role_name = :roleName;";
+            "from moca.t_moca_roles " +
+            "where role_tx_name = :name";
 
     public static final String ROLE_PAGINATION = "select role_id as roleId, " +
             "role_dt_created_at as createdAt, " +
