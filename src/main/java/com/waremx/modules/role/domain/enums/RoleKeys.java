@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum RoleKeys {
-    ACTION("action"),
     IN_ROLE_NAME("in_role_name"),
     IN_CREATE_ROLE_DTO("in_create_role_dto")
     ;

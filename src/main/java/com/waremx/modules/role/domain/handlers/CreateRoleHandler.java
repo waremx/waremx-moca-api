@@ -47,7 +47,7 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
         Optional<Role> created = this.roleRepository.create(newRole);
 
         if (created.isEmpty()) {
-            LOGGER.info("[ERROR]: Error to create role \"{}\" failed", createRoleDto);
+            LOGGER.error("[ERROR]: Error to create role \"{}\" failed", createRoleDto);
             context.err(MocaErrCodes.ROLE_ERROR_TO_CREATE);
             context.emit(RoleEvents.EVENT_CREATE_ROLE.getEvent(), Optional.empty());
             return checkNext(null);

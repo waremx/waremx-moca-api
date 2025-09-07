@@ -16,11 +16,16 @@ import com.waremx.modules.role.infrastructure.rest.dtos.RoleDto;
 import io.vavr.control.Either;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 @ApplicationScoped
 public class GetRoleBy implements GetByService<String, RoleDto> {
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetRoleBy.class);
 
     @Inject
     private RoleRepository roleRepository;
@@ -31,7 +36,7 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
         Context<Role, MocaErrCodes> context = new Context<>();
         RoleContext roleContext = new RoleContext();
         context.subscribe(event, roleContext);
-        context.set(Prop.bind(RoleKeys.ACTION.getKey(), event));
+        context.set(Prop.bind(RoleEvents.ACTION.getEvent(), event));
         context.set(Prop.bind(RoleKeys.IN_ROLE_NAME.getKey(), roleName));
 
         Context last = Handler.link(
