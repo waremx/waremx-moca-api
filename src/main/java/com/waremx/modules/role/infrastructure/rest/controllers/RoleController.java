@@ -1,6 +1,7 @@
 package com.waremx.modules.role.infrastructure.rest.controllers;
 
 import com.waremx.common.application.services.CreateService;
+import com.waremx.common.core.entities.MocaApiResponse;
 import com.waremx.common.core.entities.MocaResponseCodes;
 import com.waremx.common.core.entities.MocaResponseMapper;
 import com.waremx.common.core.errors.MocaErr;
@@ -32,34 +33,39 @@ public class RoleController {
     @Path("/create")
     @Operation(summary = "Create new role")
     @APIResponse(
-            responseCode = "200",
-            description = "Operation completed successfully"
+            responseCode = "201",
+            description = "Operation completed successfully."
     )
     @APIResponse(
             responseCode = "400",
             description = "Invalid request format. Please check the request body",
-            content = @Content(schema = @Schema(implementation = MocaErr.class),
+            content = @Content(
+                    schema = @Schema(implementation = MocaErr.class),
                     examples = {
                             @ExampleObject(value = MocaErrApiResponse.ALREADY_EXISTS),
-                    })
+                    }
+            )
     )
     @APIResponse(
             responseCode = "500",
             description = "Error to create",
-            content = @Content(schema = @Schema(implementation = MocaErr.class),
+            content = @Content(
+                    schema = @Schema(implementation = MocaErr.class),
                     examples = {
                             @ExampleObject(value = MocaErrApiResponse.ERROR_TO_CREATE),
-                    })
+                    }
+            )
     )
     @RequestBody(
             description = "Role to create",
-            required = true,
             content = @Content(
-                    schema = @Schema(implementation = CreateRoleDto.class),
-                    examples = @ExampleObject(
-                            name = "Example Role",
-                            value = "{ \"roleName\": \"SOMETHING_ROLE\" }"
-                    )
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(
+                                    name = "Role Example",
+                                    value = MocaApiResponse.INSERT
+                            )
+                    }
             )
     )
     @Consumes(MediaType.APPLICATION_JSON)

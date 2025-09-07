@@ -27,21 +27,25 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
             return checkNext(null);
         }
 
-        String roleName = context.<CreateRoleDto>get("create_role_dto").get().getRoleName();
+        CreateRoleDto createRoleDto = context.<CreateRoleDto>get("create_role_dto").orElseThrow();
         LocalDateTime now = LocalDateTime.now();
 
         Role newRole = Role.builder()
-                .name(roleName)
+                .name(createRoleDto.getName())
+                .displayName(createRoleDto.getDisplayName())
+                .createdBy("admin")
+                .updatedBy("admin")
                 .createdAt(now)
                 .updatedAt(now)
                 .isActive(true)
+                .isProtected(createRoleDto.getIsProtected())
                 .build();
 
         Optional<Role> created = this.roleRepository.create(newRole);
 
         if (created.isEmpty()) {
-            LOGGER.info("[ERROR]: Error to create role \"{}\" failed", roleName);
-            context.err(MocaErrCodes.ROLE_ALREADY_EXISTS);
+            LOGGER.info("[ERROR]: Error to create role \"{}\" failed", createRoleDto);
+            context.err(MocaErrCodes.ROLE_ERROR_TO_CREATE);
             context.emit("create_role", Optional.empty());
             return checkNext(null);
         }
