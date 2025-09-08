@@ -49,12 +49,12 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
         if (created.isEmpty()) {
             LOGGER.error("[ERROR]: Error to create role \"{}\" failed", createRoleDto);
             context.err(MocaErrCodes.ROLE_ERROR_TO_CREATE);
-            context.emit(RoleEvents.EVENT_CREATE_ROLE.getEvent(), Optional.empty());
+            context.emit(RoleEvents.CREATE_ROLE.getEvent(), Optional.empty());
             return checkNext(null);
         }
 
         LOGGER.info("[SUCCESS]: Role \"{}\" created", createRoleDto);
-        context.emit(RoleEvents.EVENT_CREATE_ROLE.getEvent(), created);
+        context.emit(RoleEvents.CREATE_ROLE.getEvent(), created);
         return checkNext(context);
     }
 }

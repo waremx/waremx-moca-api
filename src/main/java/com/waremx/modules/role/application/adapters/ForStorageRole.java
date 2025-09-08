@@ -7,8 +7,6 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.enums.RoleEvents;
-import com.waremx.modules.role.domain.enums.RoleKeys;
 import com.waremx.modules.role.domain.handlers.FilterInputHandler;
 import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
 import com.waremx.modules.role.domain.objects.Role;
@@ -18,28 +16,38 @@ import com.waremx.modules.role.infrastructure.rest.dtos.RoleDto;
 import io.vavr.control.Either;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+import static com.waremx.modules.role.domain.enums.RoleEvents.EVENT;
+import static com.waremx.modules.role.domain.enums.RoleEvents.CREATE_ROLE;
+import static com.waremx.modules.role.domain.enums.RoleKeys.IN_CREATE_ROLE_DTO;
+import static com.waremx.modules.role.domain.enums.RoleKeys.IN_ROLE_NAME;
+
 @ApplicationScoped
 public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ForStorageRole.class);
 
     @Inject
     private RoleRepository roleRepository;
 
     @Override
     public Either<MocaErrCodes, RoleDto> create(CreateRoleDto createRoleDto) {
-        String event = RoleEvents.EVENT_CREATE_ROLE.getEvent();
+
+        LOGGER.info("Event: {}", CREATE_ROLE.getEvent());
+
         Context<Role, MocaErrCodes> context = new Context<>();
         RoleContext roleContext = new RoleContext();
-        context.subscribe(event, roleContext);
-        context.set(Prop.bind(RoleEvents.ACTION.getEvent(), event));
-        context.set(Prop.bind(RoleKeys.IN_CREATE_ROLE_DTO.getKey(), createRoleDto));
-        context.set(Prop.bind(RoleKeys.IN_ROLE_NAME.getKey(), createRoleDto.getName()));
+        context.subscribe(CREATE_ROLE.getEvent(), roleContext);
+        context.set(Prop.bind(IN_CREATE_ROLE_DTO.getKey(), createRoleDto));
+        context.set(Prop.bind(IN_ROLE_NAME.getKey(), createRoleDto.getName()));
 
         Context last = Handler.link(
-                new FilterInputHandler(event),
-                new GetRoleByNameHandler(roleRepository),
+                new FilterInputHandler(CREATE_ROLE.getEvent()),
+                new GetRoleByNameHandler(roleRepository, CREATE_ROLE.getEvent()),
                 new CreateRoleHandler(roleRepository)
         )
                 .execute(context)

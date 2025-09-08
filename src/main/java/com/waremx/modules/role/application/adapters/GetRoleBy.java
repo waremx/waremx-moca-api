@@ -21,9 +21,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+import static com.waremx.modules.role.domain.enums.RoleEvents.EVENT;
+import static com.waremx.modules.role.domain.enums.RoleEvents.GET_ROLE_BY;
+import static com.waremx.modules.role.domain.enums.RoleKeys.IN_ROLE_NAME;
+
 @ApplicationScoped
 public class GetRoleBy implements GetByService<String, RoleDto> {
-
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetRoleBy.class);
 
@@ -32,16 +35,18 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
 
     @Override
     public Either<MocaErrCodes, RoleDto> getByService(String roleName) {
-        String event = RoleEvents.EVENT_GET_ROLE_BY.getEvent();
+
+        LOGGER.info("Event: {}", GET_ROLE_BY.getEvent());
+
         Context<Role, MocaErrCodes> context = new Context<>();
         RoleContext roleContext = new RoleContext();
-        context.subscribe(event, roleContext);
-        context.set(Prop.bind(RoleEvents.ACTION.getEvent(), event));
-        context.set(Prop.bind(RoleKeys.IN_ROLE_NAME.getKey(), roleName));
+        context.subscribe(GET_ROLE_BY.getEvent(), roleContext);
+        context.set(Prop.bind(EVENT.getEvent(), GET_ROLE_BY.getEvent()));
+        context.set(Prop.bind(IN_ROLE_NAME.getKey(), roleName));
 
         Context last = Handler.link(
-               new FilterInputHandler(event),
-               new GetRoleByNameHandler(roleRepository)
+               new FilterInputHandler(GET_ROLE_BY.getEvent()),
+               new GetRoleByNameHandler(roleRepository, GET_ROLE_BY.getEvent())
         )
                 .execute(context)
                 .build();
