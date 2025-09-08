@@ -21,10 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-import static com.waremx.modules.role.domain.enums.RoleEvents.EVENT;
 import static com.waremx.modules.role.domain.enums.RoleEvents.CREATE_ROLE;
-import static com.waremx.modules.role.domain.enums.RoleKeys.IN_CREATE_ROLE_DTO;
-import static com.waremx.modules.role.domain.enums.RoleKeys.IN_ROLE_NAME;
+import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_CREATE_ROLE_DTO;
+import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
 
 @ApplicationScoped
 public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
@@ -42,8 +41,8 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
         Context<Role, MocaErrCodes> context = new Context<>();
         RoleContext roleContext = new RoleContext();
         context.subscribe(CREATE_ROLE.getEvent(), roleContext);
-        context.set(Prop.bind(IN_CREATE_ROLE_DTO.getKey(), createRoleDto));
-        context.set(Prop.bind(IN_ROLE_NAME.getKey(), createRoleDto.getName()));
+        context.set(Prop.bind(INPUT_CREATE_ROLE_DTO.getKey(), createRoleDto));
+        context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), createRoleDto.getName()));
 
         Context last = Handler.link(
                 new FilterInputHandler(CREATE_ROLE.getEvent()),

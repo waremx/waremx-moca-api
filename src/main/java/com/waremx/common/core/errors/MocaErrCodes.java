@@ -22,7 +22,7 @@ public enum MocaErrCodes {
     ROLE_ALREADY_EXISTS("MOCA-ROLE-ERR004", 400, "Bad Request", "This role already exists"),
     ROLE_EMPTY_LIST("MOCA-ROLE-ERR005", 404, "Not Found", "Request completed successfully, but no records were found."),
     ROLE_ERROR_TO_UPDATE("MOCA-ROLE-ERR006", 500, "Internal Server Error", "Role could not be updated"),
-    ROLE_BAD_REQUEST_TO_CREATE("MOCA-ROLE-ERR007", 400, "Bad Request", "The role name must end with _ROLE"),
+    ROLE_FORMAT_ERROR("MOCA-ROLE-ERR007", 400, "Bad Request", "The role name must end with _ROLE"),
 
     ;
 

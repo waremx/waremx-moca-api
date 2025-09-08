@@ -18,7 +18,7 @@ import static com.waremx.modules.role.domain.enums.RoleEvents.GET_ROLE_BY;
 import static com.waremx.modules.role.domain.enums.RoleEvents.DISABLE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleEvents.ENABLE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleEvents.UPDATE_ROLE;
-import static com.waremx.modules.role.domain.enums.RoleKeys.IN_ROLE_NAME;
+import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
 
 @AllArgsConstructor
 public class GetRoleByNameHandler extends Handler<Role, MocaErrCodes> {
@@ -36,7 +36,7 @@ public class GetRoleByNameHandler extends Handler<Role, MocaErrCodes> {
             return checkNext(null);
         }
 
-        String name = context.<String>get(IN_ROLE_NAME.getKey()).orElseThrow();
+        String name = context.<String>get(INPUT_ROLE_NAME.getKey()).orElseThrow();
 
         Optional<Role> found = this.roleRepository.findRoleByName(name);
 

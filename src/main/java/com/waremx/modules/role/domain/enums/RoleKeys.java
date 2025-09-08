@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum RoleKeys {
-    IN_ROLE_NAME("in_role_name"),
-    IN_CREATE_ROLE_DTO("in_create_role_dto")
+    INPUT_ROLE_NAME("in_role_name"),
+    INPUT_CREATE_ROLE_DTO("in_create_role_dto")
     ;
 
     private final String key;

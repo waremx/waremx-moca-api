@@ -7,8 +7,6 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.enums.RoleEvents;
-import com.waremx.modules.role.domain.enums.RoleKeys;
 import com.waremx.modules.role.domain.handlers.FilterInputHandler;
 import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
 import com.waremx.modules.role.domain.objects.Role;
@@ -23,7 +21,7 @@ import java.util.Objects;
 
 import static com.waremx.modules.role.domain.enums.RoleEvents.EVENT;
 import static com.waremx.modules.role.domain.enums.RoleEvents.GET_ROLE_BY;
-import static com.waremx.modules.role.domain.enums.RoleKeys.IN_ROLE_NAME;
+import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
 
 @ApplicationScoped
 public class GetRoleBy implements GetByService<String, RoleDto> {
@@ -42,7 +40,7 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
         RoleContext roleContext = new RoleContext();
         context.subscribe(GET_ROLE_BY.getEvent(), roleContext);
         context.set(Prop.bind(EVENT.getEvent(), GET_ROLE_BY.getEvent()));
-        context.set(Prop.bind(IN_ROLE_NAME.getKey(), roleName));
+        context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), roleName));
 
         Context last = Handler.link(
                new FilterInputHandler(GET_ROLE_BY.getEvent()),
