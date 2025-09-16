@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
@@ -21,6 +22,12 @@ public class FilterInputHandler extends Handler<Role, MocaErrCodes> {
 
     @Override
     public Handler<Role, MocaErrCodes> execute(Context<Role, MocaErrCodes> context) {
+
+        if (Objects.isNull(context)) {
+            LOGGER.info("The [FilterInputHandler] handler was not executed");
+            return checkNext(null);
+        }
+
         String[] words = context.<String>get(INPUT_ROLE_NAME.getKey()).orElseThrow().split("_");
 
         if (!words[words.length - 1].equals("ROLE")) {

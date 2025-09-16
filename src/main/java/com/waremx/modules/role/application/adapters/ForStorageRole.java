@@ -36,7 +36,7 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
     @Override
     public Either<MocaErrCodes, RoleDto> create(CreateRoleDto createRoleDto) {
 
-        LOGGER.info("Event: {}", CREATE_ROLE.getEvent());
+        LOGGER.info("[EVENT]: {}", CREATE_ROLE.getEvent());
 
         Context<Role, MocaErrCodes> context = new Context<>();
         RoleContext roleContext = new RoleContext();

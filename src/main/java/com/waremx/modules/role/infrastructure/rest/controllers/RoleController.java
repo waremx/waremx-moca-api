@@ -1,6 +1,7 @@
 package com.waremx.modules.role.infrastructure.rest.controllers;
 
 import com.waremx.common.application.services.CreateService;
+import com.waremx.common.application.services.DisableService;
 import com.waremx.common.application.services.GetByService;
 import com.waremx.common.core.entities.MocaApiResponse;
 import com.waremx.common.core.entities.MocaResponseCodes;
@@ -29,6 +30,9 @@ public class RoleController {
 
     @Inject
     private GetByService<String, RoleDto> getRoleByNameService;
+
+    @Inject
+    private DisableService<String, RoleDto> disableRoleService;
 
     @POST()
     @Path("/create")
@@ -97,7 +101,7 @@ public class RoleController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("name") String name) {
         return this.getRoleByNameService.getByService(name)
-                .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.CREATE_ROLE, roleDto))
+                .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.GET_ROLE_BY_NAME, roleDto))
                 .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/" + name));
     }
 
@@ -106,6 +110,8 @@ public class RoleController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response disable(@PathParam("name") String name) {
-        return null;
+        return this.disableRoleService.disable(name)
+                .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.DISABLE_ROLE_BY_NAME, roleDto))
+                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/" + name));
     }
 }

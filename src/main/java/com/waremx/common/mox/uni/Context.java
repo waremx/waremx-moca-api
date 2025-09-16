@@ -29,6 +29,7 @@ import java.util.Optional;
 public class Context<T, E> implements Subject {
     private final Map<String, Prop<?>> props = new HashMap<>();
     private final Map<String, Observe> listeners = new HashMap<>();
+    private T result;
     private E err;
 
     /**
@@ -147,12 +148,14 @@ public class Context<T, E> implements Subject {
      */
     @Override
     public <U> void emit(String event, U obj) {
+        set(Prop.bind("result", obj));
+        this.result = (T) obj;
         Optional<Observe> listener = Optional.ofNullable(this.listeners.get(event));
         listener.ifPresent(observe -> observe.update(obj));
     }
 
-    public <U> Observe<U> getObserve(String event) {
-        return this.listeners.get(event);
+    public final <U> U result() {
+        return (U) this.result;
     }
 
 }

@@ -47,6 +47,13 @@ public class GetRoleByNameHandler extends Handler<Role, MocaErrCodes> {
             return checkNext(null);
         }
 
+        if (found.isPresent() && found.get().getIsActive().equals(Boolean.FALSE)) {
+            LOGGER.error("[ERROR]: Resource not available: {}", name);
+            context.err(MocaErrCodes.ROLE_NOT_AVAILABLE);
+            context.emit(event, Optional.empty());
+            return checkNext(null);
+        }
+
         if (found.isEmpty() && isValid(this.event)) {
             LOGGER.error("[ERROR]: Role not found with name: {}", name);
             context.err(MocaErrCodes.ROLE_NOT_FOUND);
@@ -60,6 +67,7 @@ public class GetRoleByNameHandler extends Handler<Role, MocaErrCodes> {
     }
 
     private boolean isValid(String event) {
-        return event.equals(GET_ROLE_BY.getEvent()) || event.equals(DISABLE_ROLE.getEvent()) || event.equals(UPDATE_ROLE.getEvent()) || event.equals(ENABLE_ROLE.getEvent());
+        return event.equals(GET_ROLE_BY.getEvent()) || event.equals(DISABLE_ROLE.getEvent()) ||
+               event.equals(UPDATE_ROLE.getEvent()) || event.equals(ENABLE_ROLE.getEvent());
     }
 }

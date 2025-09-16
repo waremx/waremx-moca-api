@@ -34,7 +34,7 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
     @Override
     public Either<MocaErrCodes, RoleDto> getByService(String roleName) {
 
-        LOGGER.info("Event: {}", GET_ROLE_BY.getEvent());
+        LOGGER.info("[EVENT]: {}", GET_ROLE_BY.getEvent());
 
         Context<Role, MocaErrCodes> context = new Context<>();
         RoleContext roleContext = new RoleContext();
