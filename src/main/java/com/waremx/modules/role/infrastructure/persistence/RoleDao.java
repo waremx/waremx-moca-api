@@ -27,8 +27,9 @@ public class RoleDao implements RoleRepository {
     @Override
     public Optional<Role> create(Role role) {
         try {
-            RoleJpa created = this.roleJpaRepository.saveAndFlush(RoleJpa.fromEntity(role));
-            return Optional.ofNullable(created.toEntity());
+            return Optional.ofNullable(
+                    this.roleJpaRepository.saveAndFlush(RoleJpa.fromEntity(role)).toEntity()
+            );
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -41,21 +42,49 @@ public class RoleDao implements RoleRepository {
                     .setParameter(PgQueryFactory.PARAM_ROLE_NAME, name)
                     .getSingleResult();
 
-            Role role = Role.builder()
-                    .roleId((Short) row[0])
-                    .name((String) row[1])
-                    .displayName((String) row[2])
-                    .createdBy((String) row[3])
-                    .updatedBy((String) row[4])
-                    .createdAt((LocalDateTime) row[5])
-                    .updatedAt((LocalDateTime) row[6])
-                    .isActive((Boolean) row[7])
-                    .isProtected((Boolean) row[8])
-                    .build();
-
-            return Optional.ofNullable(role);
+            return Optional.ofNullable(toRole(row));
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    @Transactional
+    @Override
+    public Optional<Role> disable(Role role) {
+        try {
+            int count = entityManager.createNativeQuery(PgQueryFactory.DISABLE_ROLE)
+                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME, role.getName())
+                    .setParameter(PgQueryFactory.PARAM_ROLE_UPDATED_BY, role.getUpdatedBy())
+                    .setParameter(PgQueryFactory.PARAM_ROLE_UPDATED_AT, role.getUpdatedAt())
+                    .executeUpdate();
+
+            if (count <= 0) {
+                return Optional.empty();
+            }
+
+            Object[] row = (Object[]) this.entityManager.createNativeQuery(PgQueryFactory.GET_ROLE_BY_NAME)
+                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME, role.getName())
+                    .getSingleResult();
+
+            return Optional.ofNullable(toRole(row));
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    private Role toRole(Object[] row) {
+        Role role = Role.builder()
+                .roleId((Short) row[0])
+                .name((String) row[1])
+                .displayName((String) row[2])
+                .createdBy((String) row[3])
+                .updatedBy((String) row[4])
+                .createdAt((LocalDateTime) row[5])
+                .updatedAt((LocalDateTime) row[6])
+                .isActive((Boolean) row[7])
+                .isProtected((Boolean) row[8])
+                .build();
+
+        return role;
     }
 }

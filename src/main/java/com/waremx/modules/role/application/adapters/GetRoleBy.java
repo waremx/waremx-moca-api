@@ -7,8 +7,6 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.enums.RoleEvents;
-import com.waremx.modules.role.domain.enums.RoleKeys;
 import com.waremx.modules.role.domain.handlers.FilterInputHandler;
 import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
 import com.waremx.modules.role.domain.objects.Role;
@@ -21,9 +19,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+import static com.waremx.modules.role.domain.enums.RoleEvents.EVENT;
+import static com.waremx.modules.role.domain.enums.RoleEvents.GET_ROLE_BY;
+import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
+
 @ApplicationScoped
 public class GetRoleBy implements GetByService<String, RoleDto> {
-
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetRoleBy.class);
 
@@ -32,26 +33,33 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
 
     @Override
     public Either<MocaErrCodes, RoleDto> getByService(String roleName) {
-        String event = RoleEvents.EVENT_GET_ROLE_BY.getEvent();
+
+        LOGGER.info("[EVENT]: {}", GET_ROLE_BY.getEvent());
+
         Context<Role, MocaErrCodes> context = new Context<>();
         RoleContext roleContext = new RoleContext();
-        context.subscribe(event, roleContext);
-        context.set(Prop.bind(RoleEvents.ACTION.getEvent(), event));
-        context.set(Prop.bind(RoleKeys.IN_ROLE_NAME.getKey(), roleName));
+        context.subscribe(GET_ROLE_BY.getEvent(), roleContext);
+        context.set(Prop.bind(EVENT.getEvent(), GET_ROLE_BY.getEvent()));
+        context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), roleName));
 
         Context last = Handler.link(
-               new FilterInputHandler(event),
-               new GetRoleByNameHandler(roleRepository)
+               new FilterInputHandler(GET_ROLE_BY.getEvent()),
+               new GetRoleByNameHandler(roleRepository, GET_ROLE_BY.getEvent())
         )
                 .execute(context)
                 .build();
 
         if (Objects.isNull(last)) {
+            LOGGER.error("[ERROR]: The request could not be processed. Failed in the adapter. [GetRoleBy]");
+            context.clear();
             return Either.left(context.err());
         }
 
         return roleContext.get()
-                .<Either<MocaErrCodes, RoleDto>>map(role -> Either.right(RoleDto.from(role)))
+                .<Either<MocaErrCodes, RoleDto>>map(role -> {
+                    context.clear();
+                    return Either.right(RoleDto.from(role));
+                })
                 .orElseGet(() -> Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR));
 
     }

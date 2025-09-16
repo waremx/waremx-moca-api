@@ -16,6 +16,8 @@ public class PgQueryFactory {
     public static  final String PARAM_ROLE_LIMIT = "limit";
     public static  final String PARAM_ROLE_OFFSET = "offset";
     public static  final String PARAM_ROLE_NAME = "name";
+    public static  final String PARAM_ROLE_UPDATED_AT = "now";
+    public static  final String PARAM_ROLE_UPDATED_BY = "by";
 
     public static final String GET_ROLE_BY_NAME = "select role_id as roleId, " +
             "role_tx_name as name, " +
@@ -36,4 +38,11 @@ public class PgQueryFactory {
             "from t_moca_roles " +
             "limit coalesce(:limit, 10) " +
             "offset coalesce(:offset, 0);";
+
+    public static final String DISABLE_ROLE = "update " +
+            "moca.t_moca_roles set " +
+            "role_st_is_active = false, " +
+            "role_tx_updated_by = :by, " +
+            "role_dt_updated_at = :now " +
+            "where role_tx_name = :name";
 }

@@ -3,8 +3,6 @@ package com.waremx.modules.role.domain.handlers;
 import com.waremx.common.core.errors.MocaErrCodes;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
-import com.waremx.modules.role.domain.enums.RoleEvents;
-import com.waremx.modules.role.domain.enums.RoleKeys;
 import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.common.core.patterns.Handler;
 import com.waremx.modules.role.infrastructure.rest.dtos.CreateRoleDto;
@@ -16,10 +14,14 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.waremx.modules.role.domain.enums.RoleEvents.CREATE_ROLE;
+import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_CREATE_ROLE_DTO;
+
 @AllArgsConstructor
 public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateRoleHandler.class);
+
     private final RoleRepository roleRepository;
 
     @Override
@@ -30,9 +32,10 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
             return checkNext(null);
         }
 
-        CreateRoleDto createRoleDto = context.<CreateRoleDto>get(RoleKeys.IN_CREATE_ROLE_DTO.getKey()).orElseThrow();
+        CreateRoleDto createRoleDto = context.<CreateRoleDto>get(INPUT_CREATE_ROLE_DTO.getKey()).orElseThrow();
         LocalDateTime now = LocalDateTime.now();
 
+        //TODO: Add the user who creates the context information role when authentication is available.
         Role newRole = Role.builder()
                 .name(createRoleDto.getName())
                 .displayName(createRoleDto.getDisplayName())
@@ -49,12 +52,12 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
         if (created.isEmpty()) {
             LOGGER.error("[ERROR]: Error to create role \"{}\" failed", createRoleDto);
             context.err(MocaErrCodes.ROLE_ERROR_TO_CREATE);
-            context.emit(RoleEvents.EVENT_CREATE_ROLE.getEvent(), Optional.empty());
+            context.emit(CREATE_ROLE.getEvent(), Optional.empty());
             return checkNext(null);
         }
 
         LOGGER.info("[SUCCESS]: Role \"{}\" created", createRoleDto);
-        context.emit(RoleEvents.EVENT_CREATE_ROLE.getEvent(), created);
+        context.emit(CREATE_ROLE.getEvent(), created);
         return checkNext(context);
     }
 }

@@ -1,6 +1,7 @@
 package com.waremx.modules.role.infrastructure.rest.controllers;
 
 import com.waremx.common.application.services.CreateService;
+import com.waremx.common.application.services.DisableService;
 import com.waremx.common.application.services.GetByService;
 import com.waremx.common.core.entities.MocaApiResponse;
 import com.waremx.common.core.entities.MocaResponseCodes;
@@ -29,6 +30,9 @@ public class RoleController {
 
     @Inject
     private GetByService<String, RoleDto> getRoleByNameService;
+
+    @Inject
+    private DisableService<String, RoleDto> disableRoleService;
 
     @POST()
     @Path("/create")
@@ -79,11 +83,35 @@ public class RoleController {
 
     @GET
     @Path("/{name}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get role by name")
+    @APIResponse(
+            responseCode = "200",
+            description = "Operation completed successfully."
+    )
+    @APIResponse(
+            responseCode = "404",
+            description = "Invalid request format. Resource not found.",
+            content = @Content(
+                    schema = @Schema(implementation = MocaErr.class),
+                    examples = {
+                            @ExampleObject(value = MocaErrApiResponse.NOT_FOUND),
+                    }
+            )
+    )
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("name") String name) {
         return this.getRoleByNameService.getByService(name)
-                .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.CREATE_ROLE, roleDto))
+                .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.GET_ROLE_BY_NAME, roleDto))
+                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/" + name));
+    }
+
+    @PATCH
+    @Path("/disable/{name}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response disable(@PathParam("name") String name) {
+        return this.disableRoleService.disable(name)
+                .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.DISABLE_ROLE_BY_NAME, roleDto))
                 .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/" + name));
     }
 }
