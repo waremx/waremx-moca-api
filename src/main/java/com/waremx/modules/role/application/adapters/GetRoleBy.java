@@ -50,11 +50,16 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
                 .build();
 
         if (Objects.isNull(last)) {
+            LOGGER.error("[ERROR]: The request could not be processed. Failed in the adapter. [GetRoleBy]");
+            context.clear();
             return Either.left(context.err());
         }
 
         return roleContext.get()
-                .<Either<MocaErrCodes, RoleDto>>map(role -> Either.right(RoleDto.from(role)))
+                .<Either<MocaErrCodes, RoleDto>>map(role -> {
+                    context.clear();
+                    return Either.right(RoleDto.from(role));
+                })
                 .orElseGet(() -> Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR));
 
     }
