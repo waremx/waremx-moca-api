@@ -16,6 +16,9 @@ public class PgQueryFactory {
     public static  final String PARAM_ROLE_LIMIT = "limit";
     public static  final String PARAM_ROLE_OFFSET = "offset";
     public static  final String PARAM_ROLE_NAME = "name";
+    public static  final String PARAM_ROLE_NAME_VAL = "roleName";
+    public static  final String PARAM_ROLE_DISPLAY_NAME = "displayName";
+    public static  final String PARAM_ROLE_IS_PROTECTED = "isProtected";
     public static  final String PARAM_ROLE_UPDATED_AT = "now";
     public static  final String PARAM_ROLE_UPDATED_BY = "by";
 
@@ -42,6 +45,15 @@ public class PgQueryFactory {
     public static final String DISABLE_ROLE = "update " +
             "moca.t_moca_roles set " +
             "role_st_is_active = false, " +
+            "role_tx_updated_by = :by, " +
+            "role_dt_updated_at = :now " +
+            "where role_tx_name = :name";
+
+    public static final String UPDATE_ROLE = "update " +
+            "moca.t_moca_roles set " +
+            "role_tx_name = :roleName, " +
+            "role_tx_display_name = :displayName, " +
+            "role_st_is_protected = :isProtected, " +
             "role_tx_updated_by = :by, " +
             "role_dt_updated_at = :now " +
             "where role_tx_name = :name";

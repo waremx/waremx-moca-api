@@ -9,6 +9,7 @@ public enum MocaResponseCodes {
     GET_ROLE_BY_ID("MOCA-ROLE-002", 200, "Get role", "Role retrieved successfully"),
     GET_ROLE_BY_NAME("MOCA-ROLE-003", 200, "Get role by name", "Role retrieved successfully"),
     DISABLE_ROLE_BY_NAME("MOCA-ROLE-004", 200, "Disable role", "Role has been successfully deactivated"),
+    UPDATE_ROLE("MOCA-ROLE-005", 200, "Update role", "The role has been successfully updated"),
     ;
 
     private final String mocaStatusCode;

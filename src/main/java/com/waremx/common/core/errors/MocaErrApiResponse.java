@@ -7,7 +7,7 @@ public class MocaErrApiResponse {
             "timestamp": "2019-09-16T22:14:45.624+0000",
             "errors": [
                 {
-                    "mocaErrorCode": "MOCA-MOD-ERR001",
+                    "mocaErrorCode": "MOCA-MOD-ERR00X",
                     "code": 404,
                     "status": "Not Found",
                     "message": "Resource not found"
@@ -22,7 +22,7 @@ public class MocaErrApiResponse {
             "timestamp": "2019-09-16T22:14:45.624+0000",
             "errors": [
                 {
-                    "mocaErrorCode": "MOCA-MOD-ERR002",
+                    "mocaErrorCode": "MOCA-MOD-ERR00X",
                     "code": 400,
                     "status": "Bad Request",
                     "message": "Resource not available"
@@ -37,7 +37,7 @@ public class MocaErrApiResponse {
             "timestamp": "2019-09-16T22:14:45.624+0000",
             "errors": [
                 {
-                    "mocaErrorCode": "MOCA-MOD-ERR004",
+                    "mocaErrorCode": "MOCA-MOD-ERR00X",
                     "code": 400,
                     "status": "Bad Request",
                     "message": "Oops... Something went wrong, this resource already exists"
@@ -52,10 +52,40 @@ public class MocaErrApiResponse {
             "timestamp": "2019-09-16T22:14:45.624+0000",
             "errors": [
                 {
-                    "mocaErrorCode": "MOCA-MOD-ERR003",
+                    "mocaErrorCode": "MOCA-MOD-ERR00X",
                     "code": 500,
                     "status": "Internal Server Error",
                     "message": "Oops... Something went wrong, resource could not be created"
+                }
+            ]
+        }
+    """;
+
+    public static final String ERROR_TO_UPDATE = """
+        {
+            "path": "/api/resource",
+            "timestamp": "2019-09-16T22:14:45.624+0000",
+            "errors": [
+                {
+                    "mocaErrorCode": "MOCA-MOD-ERR00X",
+                    "code": 500,
+                    "status": "Internal Server Error",
+                    "message": "Oops... Something went wrong, resource could not be updated"
+                }
+            ]
+        }
+    """;
+
+    public static final String INVALID_FORMAT = """
+        {
+            "path": "/api/resource",
+            "timestamp": "2019-09-16T22:14:45.624+0000",
+            "errors": [
+                {
+                    "mocaErrorCode": "MOCA-MOD-ERR00X",
+                    "code": 400,
+                    "status": "Bad Request",
+                    "message": "Oops... Something went wrong. Invalid format. Please check the values"
                 }
             ]
         }

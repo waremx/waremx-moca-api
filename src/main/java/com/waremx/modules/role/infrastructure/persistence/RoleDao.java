@@ -72,6 +72,33 @@ public class RoleDao implements RoleRepository {
         }
     }
 
+    @Transactional
+    @Override
+    public Optional<Role> update(String name, Role role) {
+        try {
+            int count = entityManager.createNativeQuery(PgQueryFactory.UPDATE_ROLE)
+                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME_VAL, role.getName())
+                    .setParameter(PgQueryFactory.PARAM_ROLE_DISPLAY_NAME, role.getDisplayName())
+                    .setParameter(PgQueryFactory.PARAM_ROLE_IS_PROTECTED, role.getIsProtected())
+                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME, name)
+                    .setParameter(PgQueryFactory.PARAM_ROLE_UPDATED_BY, role.getUpdatedBy())
+                    .setParameter(PgQueryFactory.PARAM_ROLE_UPDATED_AT, role.getUpdatedAt())
+                    .executeUpdate();
+
+            if (count <= 0) {
+                return Optional.empty();
+            }
+
+            Object[] row = (Object[]) this.entityManager.createNativeQuery(PgQueryFactory.GET_ROLE_BY_NAME)
+                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME, role.getName())
+                    .getSingleResult();
+
+            return Optional.ofNullable(toRole(row));
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
     private Role toRole(Object[] row) {
         Role role = Role.builder()
                 .roleId((Short) row[0])
