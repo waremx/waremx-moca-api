@@ -44,7 +44,7 @@ public class UpdateRole implements UpdateService<String, UpdateRoleDto, RoleDto>
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), id));
         context.set(Prop.bind(INPUT_UPDATE_ROLE_DTO.getKey(), updateRoleDto));
 
-        Context last = Handler.link(
+        Context<Role, MocaErrCodes> last = Handler.link(
                 new FilterInputHandler(CREATE_ROLE.getEvent()),
                 new GetRoleByNameHandler(roleRepository, UPDATE_ROLE.getEvent()),
                 new UpdateRoleHandler(roleRepository, UPDATE_ROLE.getEvent())

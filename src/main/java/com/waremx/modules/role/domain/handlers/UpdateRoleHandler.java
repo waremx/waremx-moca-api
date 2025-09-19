@@ -38,6 +38,10 @@ public class UpdateRoleHandler extends Handler<Role, MocaErrCodes> {
         String id = context.<String>get(INPUT_ROLE_NAME.getKey()).orElseThrow();
         LocalDateTime now = LocalDateTime.now();
 
+        //TODO: Validate if role name is valid
+        //TODO: Validate role name not null, not empty
+        //TODO: Validate whether the role already exists
+
         Role toUpdate = Role.builder()
                 .name(updateRoleDto.getName() != null ? updateRoleDto.getName() : found.get().getName())
                 .displayName(updateRoleDto.getDisplayName() != null ? updateRoleDto.getDisplayName() : found.get().getDisplayName())

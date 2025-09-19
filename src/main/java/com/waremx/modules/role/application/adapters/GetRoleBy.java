@@ -42,7 +42,7 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
         context.set(Prop.bind(EVENT.getEvent(), GET_ROLE_BY.getEvent()));
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), roleName));
 
-        Context last = Handler.link(
+        Context<Role, MocaErrCodes> last = Handler.link(
                new FilterInputHandler(GET_ROLE_BY.getEvent()),
                new GetRoleByNameHandler(roleRepository, GET_ROLE_BY.getEvent())
         )

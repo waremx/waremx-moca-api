@@ -42,7 +42,7 @@ public class DisableRole implements DisableService<String, RoleDto> {
         context.subscribe(DISABLE_ROLE.getEvent(), roleContext);
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), name));
 
-        Context last = Handler.link(
+        Context<Role, MocaErrCodes> last = Handler.link(
                 new FilterInputHandler(DISABLE_ROLE.getEvent()),
                 new GetRoleByNameHandler(roleRepository, GET_ROLE_BY.getEvent()),
                 new ToDisableRoleHandler(roleRepository, DISABLE_ROLE.getEvent())

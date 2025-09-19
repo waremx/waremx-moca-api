@@ -22,7 +22,7 @@ public abstract class Handler<T, E> {
         return first;
     }
 
-    public final Context build() {
+    public final Context<T, E> build() {
         return this.context;
     }
 
