@@ -55,12 +55,9 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
             return Either.left(context.err());
         }
 
-        return roleContext.get()
-                .<Either<MocaErrCodes, RoleDto>>map(role -> {
-                    context.clear();
-                    return Either.right(RoleDto.from(role));
-                })
-                .orElseGet(() -> Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR));
+        Either<MocaErrCodes, RoleDto> result = roleContext.get().map(RoleDto::from);
+        context.clear();
+        return result;
 
     }
 }

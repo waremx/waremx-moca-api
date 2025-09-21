@@ -5,11 +5,9 @@ import com.waremx.modules.role.domain.objects.Role;
 
 import io.vavr.control.Either;
 
-import java.util.Optional;
-
 public interface RoleRepository {
-    Optional<Role> create(Role role);
-    Optional<Role> findRoleByName(String name);
-    Optional<Role> disable(Role role);
+    Either<MocaErrCodes, Role> create(Role role);
+    Either<MocaErrCodes, Role> findRoleByName(String name);
+    Either<MocaErrCodes, Role> disable(Role role);
     Either<MocaErrCodes, Role> update(String name, Role role);
 }

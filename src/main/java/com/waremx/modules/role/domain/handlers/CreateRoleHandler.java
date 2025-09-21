@@ -6,13 +6,14 @@ import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.common.core.patterns.Handler;
 import com.waremx.modules.role.infrastructure.rest.dtos.CreateRoleDto;
+
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.waremx.modules.role.domain.enums.RoleEvents.CREATE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_CREATE_ROLE_DTO;
@@ -47,12 +48,12 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
                 .isProtected(createRoleDto.getIsProtected())
                 .build();
 
-        Optional<Role> created = this.roleRepository.create(newRole);
+        Either<MocaErrCodes, Role> created = this.roleRepository.create(newRole);
 
         if (created.isEmpty()) {
             LOGGER.error("[ERROR]: Error to create role \"{}\" failed", createRoleDto);
-            context.err(MocaErrCodes.ROLE_ERROR_TO_CREATE);
-            context.emit(CREATE_ROLE.getEvent(), Optional.empty());
+            context.err(created.getLeft());
+            context.emit(CREATE_ROLE.getEvent(), created);
             return checkNext(null);
         }
 

@@ -5,13 +5,14 @@ import com.waremx.common.core.patterns.Handler;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.objects.Role;
+
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class ToDisableRoleHandler extends Handler<Role, MocaErrCodes> {
@@ -29,12 +30,12 @@ public class ToDisableRoleHandler extends Handler<Role, MocaErrCodes> {
             return checkNext(null);
         }
 
-        Optional<Role> found = context.result();
+        Either<MocaErrCodes, Role> found = context.result();
 
-        if (found.isEmpty()) {
+        if (found.isLeft()) {
             LOGGER.error("[ERROR]: The role was not found within the context of the request");
             context.err(MocaErrCodes.INTERNAL_SERVER_ERROR);
-            context.emit(event, Optional.empty());
+            context.emit(event, found);
             return checkNext(null);
         }
 
@@ -44,12 +45,12 @@ public class ToDisableRoleHandler extends Handler<Role, MocaErrCodes> {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        Optional<Role> updated = this.roleRepository.disable(disabledRole);
+        Either<MocaErrCodes, Role> updated = this.roleRepository.disable(disabledRole);
 
-        if (updated.isEmpty()) {
+        if (updated.isLeft()) {
             LOGGER.error("[ERROR]: This role could not be updated: {}", found.get().getName());
             context.err(MocaErrCodes.ROLE_ERROR_TO_UPDATE);
-            context.emit(event, Optional.empty());
+            context.emit(event, updated);
             return checkNext(null);
         }
 

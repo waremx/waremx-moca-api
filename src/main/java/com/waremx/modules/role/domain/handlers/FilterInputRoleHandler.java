@@ -4,11 +4,11 @@ import com.waremx.common.core.errors.MocaErrCodes;
 import com.waremx.common.core.patterns.Handler;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.domain.objects.Role;
+
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
 
@@ -31,14 +31,14 @@ public class FilterInputRoleHandler extends Handler<Role, MocaErrCodes> {
         if ((words.length == 2 && words[0].isBlank()) || (words[0].length() < 3)) {
             LOGGER.error("[ERROR]: This role does not have a valid name format");
             context.err(MocaErrCodes.ROLE_FORMAT_ERROR);
-            context.emit(this.event, Optional.empty());
+            context.emit(this.event, Either.left(MocaErrCodes.ROLE_FORMAT_ERROR));
             return checkNext(null);
         }
 
         if (!words[words.length - 1].equals("ROLE")) {
             LOGGER.error("[ERROR]: The role name must end with \"_ROLE\"");
             context.err(MocaErrCodes.ROLE_FORMAT_ERROR);
-            context.emit(this.event, Optional.empty());
+            context.emit(this.event, Either.left(MocaErrCodes.ROLE_FORMAT_ERROR));
             return checkNext(null);
         }
 
