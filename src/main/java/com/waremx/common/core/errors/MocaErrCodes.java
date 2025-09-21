@@ -26,6 +26,7 @@ public enum MocaErrCodes {
     ROLE_FORMAT_ERROR("MOCA-ROLE-ERR007", 400, "Bad Request", "The role name must end with _ROLE and starts with a value of three characters or more"),
     ROLE_NOT_BLANK_VALUE("MOCA-ROLE-ERR008", 400, "Bad Request", "Value cannot be left blank or empty in the body of your request. Please provide a valid value for the required field"),
     ROLE_VALUE_ALREADY_EXISTS("MOCA-ROLE-ERR009", 400, "Bad Request", "You cannot update the role name or display name with this value because it already exists"),
+    ROLE_INVALID_QUERY_PARAMS("MOCA-ROLE-ERR010", 400, "Bad Request", "Invalid query parameters (e.g. negative limit/offset). Values cannot be negative"),
 
     ;
 

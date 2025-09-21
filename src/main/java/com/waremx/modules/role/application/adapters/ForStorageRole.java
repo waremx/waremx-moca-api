@@ -58,7 +58,7 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
             return Either.left(context.err());
         }
 
-        Either<MocaErrCodes, RoleDto> result = roleContext.get().map(RoleDto::from);
+        Either<MocaErrCodes, RoleDto> result = roleContext.<Role>get().map(RoleDto::from);
         context.clear();
         return result;
     }

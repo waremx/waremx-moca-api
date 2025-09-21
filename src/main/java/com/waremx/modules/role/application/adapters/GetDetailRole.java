@@ -22,9 +22,9 @@ import static com.waremx.modules.role.domain.enums.RoleEvents.GET_ROLE_BY;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
 
 @ApplicationScoped
-public class GetRoleBy implements GetByService<String, RoleDto> {
+public class GetDetailRole implements GetByService<String, RoleDto> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetRoleBy.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetDetailRole.class);
 
     @Inject
     private RoleRepository roleRepository;
@@ -53,7 +53,7 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
             return Either.left(context.err());
         }
 
-        Either<MocaErrCodes, RoleDto> result = roleContext.get().map(RoleDto::from);
+        Either<MocaErrCodes, RoleDto> result = roleContext.<Role>get().map(RoleDto::from);
         context.clear();
         return result;
 
