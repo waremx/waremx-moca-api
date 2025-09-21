@@ -66,13 +66,7 @@ public class RoleDao implements RoleRepository {
                 return Either.left(MocaErrCodes.ROLE_ERROR_TO_UPDATE);
             }
 
-            Object[] row = (Object[]) this.entityManager.createNativeQuery(PgQueryFactory.GET_ROLE_BY_NAME)
-                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME, role.getName())
-                    .getSingleResult();
-
-            return Either.right(toRole(row));
-        } catch (NoResultException e) {
-            return Either.left(MocaErrCodes.ROLE_NOT_FOUND);
+            return this.findRoleByName(role.getName());
         } catch (Exception e) {
             return Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR);
         }
@@ -95,13 +89,11 @@ public class RoleDao implements RoleRepository {
                 return Either.left(MocaErrCodes.ROLE_ERROR_TO_UPDATE);
             }
 
-            Object[] row = (Object[]) this.entityManager.createNativeQuery(PgQueryFactory.GET_ROLE_BY_NAME)
-                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME, role.getName())
-                    .getSingleResult();
-
-            return Either.right(toRole(row));
+            return this.findRoleByName(role.getName());
         } catch (ConstraintViolationException e) {
             return Either.left(MocaErrCodes.ROLE_VALUE_ALREADY_EXISTS);
+        } catch (Exception e) {
+            return Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR);
         }
     }
 

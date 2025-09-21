@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @AllArgsConstructor
 public class ToDisableRoleHandler extends Handler<Role, MocaErrCodes> {
@@ -25,17 +24,13 @@ public class ToDisableRoleHandler extends Handler<Role, MocaErrCodes> {
     @Override
     public Handler<Role, MocaErrCodes> execute(Context<Role, MocaErrCodes> context) {
 
-        if (Objects.isNull(context)) {
-            LOGGER.info("The [ToDisableRoleHandler] handler was not executed");
-            return checkNext(null);
-        }
+        LOGGER.info("[HANDLER]: ToDisableRoleHandler");
 
         Either<MocaErrCodes, Role> found = context.result();
 
         if (found.isLeft()) {
             LOGGER.error("[ERROR]: The role was not found within the context of the request");
             context.err(MocaErrCodes.INTERNAL_SERVER_ERROR);
-            context.emit(event, found);
             return checkNext(null);
         }
 
@@ -50,7 +45,6 @@ public class ToDisableRoleHandler extends Handler<Role, MocaErrCodes> {
         if (updated.isLeft()) {
             LOGGER.error("[ERROR]: This role could not be updated: {}", found.get().getName());
             context.err(MocaErrCodes.ROLE_ERROR_TO_UPDATE);
-            context.emit(event, updated);
             return checkNext(null);
         }
 

@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import static com.waremx.modules.role.domain.enums.RoleEvents.CREATE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_CREATE_ROLE_DTO;
@@ -28,10 +27,7 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
     @Override
     public Handler<Role, MocaErrCodes> execute(Context<Role, MocaErrCodes> context) {
 
-        if (Objects.isNull(context)) {
-            LOGGER.info("The [CreateRoleHandler] handler was not executed");
-            return checkNext(null);
-        }
+        LOGGER.info("[HANDLER]: CreateRoleHandler");
 
         CreateRoleDto createRoleDto = context.<CreateRoleDto>get(INPUT_CREATE_ROLE_DTO.getKey()).orElseThrow();
         LocalDateTime now = LocalDateTime.now();
@@ -53,7 +49,6 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
         if (created.isEmpty()) {
             LOGGER.error("[ERROR]: Error to create role \"{}\" failed", createRoleDto);
             context.err(created.getLeft());
-            context.emit(CREATE_ROLE.getEvent(), created);
             return checkNext(null);
         }
 

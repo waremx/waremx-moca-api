@@ -45,7 +45,7 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), createRoleDto.getName()));
 
         Context<Role, MocaErrCodes> last = Handler.link(
-                new FilterInputRoleHandler(CREATE_ROLE.getEvent()),
+                new FilterInputRoleHandler(),
                 new GetRoleByNameHandler(roleRepository, CREATE_ROLE.getEvent()),
                 new CreateRoleHandler(roleRepository)
         )
