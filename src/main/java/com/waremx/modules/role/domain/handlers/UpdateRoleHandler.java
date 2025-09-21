@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static com.waremx.modules.role.domain.enums.RoleEvents.UPDATE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleKeys.*;
@@ -23,19 +22,15 @@ public class UpdateRoleHandler extends Handler<Role, MocaErrCodes> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateRoleHandler.class);
     private RoleRepository roleRepository;
-    private String event;
 
 
     @Override
     public Handler<Role, MocaErrCodes> execute(Context<Role, MocaErrCodes> context) {
 
-        if (context == null) {
-            LOGGER.info("The [UpdateRoleHandler] handler was not executed");
-            return checkNext(null);
-        }
+        LOGGER.info("[HANDLER]: UpdateRoleHandler");
 
         UpdateRoleDto updateRoleDto = context.<UpdateRoleDto>get(INPUT_UPDATE_ROLE_DTO.getKey()).orElseThrow();
-        Optional<Role> found = context.<Optional<Role>>get(RESULT.getKey()).orElseThrow();
+        Either<MocaErrCodes, Role> found = context.<Either<MocaErrCodes, Role>>get(RESULT.getKey()).orElseThrow();
         String id = context.<String>get(INPUT_ROLE_NAME.getKey()).orElseThrow();
         LocalDateTime now = LocalDateTime.now();
 
@@ -43,7 +38,6 @@ public class UpdateRoleHandler extends Handler<Role, MocaErrCodes> {
             if (updateRoleDto.getName().isBlank()) {
                 LOGGER.error("[ERROR]: The role name could not be empty");
                 context.err(MocaErrCodes.ROLE_NOT_BLANK_VALUE);
-                context.emit(this.event, Optional.empty());
                 return checkNext(null);
             }
 
@@ -51,7 +45,6 @@ public class UpdateRoleHandler extends Handler<Role, MocaErrCodes> {
             if ((words.length == 2 && (words[0].isBlank() || words[0].length() < 3)) || words.length <= 1 || !words[words.length - 1].equals("ROLE")) {
                 LOGGER.error("[ERROR]: The value you are trying to update is not a valid value {}", words[0]);
                 context.err(MocaErrCodes.ROLE_FORMAT_ERROR);
-                context.emit(this.event, Optional.empty());
                 return checkNext(null);
             }
         }
@@ -60,7 +53,6 @@ public class UpdateRoleHandler extends Handler<Role, MocaErrCodes> {
             if (updateRoleDto.getDisplayName().isBlank()) {
                 LOGGER.error("[ERROR]: The role display name could not be empty");
                 context.err(MocaErrCodes.ROLE_NOT_BLANK_VALUE);
-                context.emit(this.event, Optional.empty());
                 return checkNext(null);
             }
 
@@ -84,12 +76,11 @@ public class UpdateRoleHandler extends Handler<Role, MocaErrCodes> {
         if (updated.isLeft()) {
             LOGGER.error("[ERROR]: Error to update role \"{}\" failed", updated);
             context.err(updated.getLeft());
-            context.emit(UPDATE_ROLE.getEvent(), Optional.empty());
             return checkNext(null);
         }
 
         LOGGER.info("[SUCCESS]: Role \"{}\" updated", updated);
-        context.emit(UPDATE_ROLE.getEvent(), updated.map(Optional::of).getOrElseGet(err -> Optional.empty()));
+        context.emit(UPDATE_ROLE.getEvent(), updated);
         return checkNext(context);
     }
 }

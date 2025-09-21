@@ -7,21 +7,18 @@ import com.waremx.modules.role.domain.objects.Role;
 import io.vavr.control.Either;
 import lombok.Getter;
 
-import java.util.Optional;
-
 @Getter
-public class RoleContext implements Observe<Optional<Role>> {
+public class RoleContext implements Observe<Either<MocaErrCodes, Role>> {
 
-    private Optional<Role> result;
-    private Either<MocaErrCodes, Role> role;
+    private Either<MocaErrCodes, Role> result;
 
     @Override
-    public void update(Optional<Role> event) {
+    public void update(Either<MocaErrCodes, Role> event) {
         this.result = event;
     }
 
     @Override
-    public Optional<Role> get() {
-        return this.result;
+    public Either<MocaErrCodes, Role> get() {
+        return result;
     }
 }

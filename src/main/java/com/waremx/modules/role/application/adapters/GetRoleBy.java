@@ -17,8 +17,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
-
 import static com.waremx.modules.role.domain.enums.RoleEvents.EVENT;
 import static com.waremx.modules.role.domain.enums.RoleEvents.GET_ROLE_BY;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
@@ -43,24 +41,21 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), roleName));
 
         Context<Role, MocaErrCodes> last = Handler.link(
-               new FilterInputRoleHandler(GET_ROLE_BY.getEvent()),
+               new FilterInputRoleHandler(),
                new GetRoleByNameHandler(roleRepository, GET_ROLE_BY.getEvent())
         )
                 .execute(context)
                 .build();
 
-        if (Objects.isNull(last)) {
+        if (last == null) {
             LOGGER.error("[ERROR]: The request could not be processed. Failed in the adapter. [GetRoleBy]");
             context.clear();
             return Either.left(context.err());
         }
 
-        return roleContext.get()
-                .<Either<MocaErrCodes, RoleDto>>map(role -> {
-                    context.clear();
-                    return Either.right(RoleDto.from(role));
-                })
-                .orElseGet(() -> Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR));
+        Either<MocaErrCodes, RoleDto> result = roleContext.get().map(RoleDto::from);
+        context.clear();
+        return result;
 
     }
 }

@@ -15,7 +15,6 @@ import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -30,32 +29,32 @@ public class RoleDao implements RoleRepository {
 
     @Transactional
     @Override
-    public Optional<Role> create(Role role) {
+    public Either<MocaErrCodes, Role> create(Role role) {
         try {
-            return Optional.ofNullable(
-                    this.roleJpaRepository.saveAndFlush(RoleJpa.fromEntity(role)).toEntity()
-            );
+            return Either.right(this.roleJpaRepository.saveAndFlush(RoleJpa.fromEntity(role)).toEntity());
         } catch (Exception e) {
-            return Optional.empty();
+            return Either.left(MocaErrCodes.ROLE_ERROR_TO_CREATE);
         }
     }
 
     @Override
-    public Optional<Role> findRoleByName(String name) {
+    public Either<MocaErrCodes, Role> findRoleByName(String name) {
         try {
             Object[] row = (Object[]) this.entityManager.createNativeQuery(PgQueryFactory.GET_ROLE_BY_NAME)
                     .setParameter(PgQueryFactory.PARAM_ROLE_NAME, name)
                     .getSingleResult();
 
-            return Optional.ofNullable(toRole(row));
+            return Either.right(toRole(row));
         } catch (NoResultException e) {
-            return Optional.empty();
+            return Either.left(MocaErrCodes.ROLE_NOT_FOUND);
+        } catch (Exception e) {
+            return Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Transactional
     @Override
-    public Optional<Role> disable(Role role) {
+    public Either<MocaErrCodes, Role> disable(Role role) {
         try {
             int count = entityManager.createNativeQuery(PgQueryFactory.DISABLE_ROLE)
                     .setParameter(PgQueryFactory.PARAM_ROLE_NAME, role.getName())
@@ -64,16 +63,12 @@ public class RoleDao implements RoleRepository {
                     .executeUpdate();
 
             if (count <= 0) {
-                return Optional.empty();
+                return Either.left(MocaErrCodes.ROLE_ERROR_TO_UPDATE);
             }
 
-            Object[] row = (Object[]) this.entityManager.createNativeQuery(PgQueryFactory.GET_ROLE_BY_NAME)
-                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME, role.getName())
-                    .getSingleResult();
-
-            return Optional.ofNullable(toRole(row));
-        } catch (NoResultException e) {
-            return Optional.empty();
+            return this.findRoleByName(role.getName());
+        } catch (Exception e) {
+            return Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -94,13 +89,11 @@ public class RoleDao implements RoleRepository {
                 return Either.left(MocaErrCodes.ROLE_ERROR_TO_UPDATE);
             }
 
-            Object[] row = (Object[]) this.entityManager.createNativeQuery(PgQueryFactory.GET_ROLE_BY_NAME)
-                    .setParameter(PgQueryFactory.PARAM_ROLE_NAME, role.getName())
-                    .getSingleResult();
-
-            return Either.right(toRole(row));
+            return this.findRoleByName(role.getName());
         } catch (ConstraintViolationException e) {
             return Either.left(MocaErrCodes.ROLE_VALUE_ALREADY_EXISTS);
+        } catch (Exception e) {
+            return Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR);
         }
     }
 

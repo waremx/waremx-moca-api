@@ -43,7 +43,7 @@ public class DisableRole implements DisableService<String, RoleDto> {
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), name));
 
         Context<Role, MocaErrCodes> last = Handler.link(
-                new FilterInputRoleHandler(DISABLE_ROLE.getEvent()),
+                new FilterInputRoleHandler(),
                 new GetRoleByNameHandler(roleRepository, GET_ROLE_BY.getEvent()),
                 new ToDisableRoleHandler(roleRepository, DISABLE_ROLE.getEvent())
         )
@@ -56,11 +56,8 @@ public class DisableRole implements DisableService<String, RoleDto> {
             return Either.left(context.err());
         }
 
-        return roleContext.get()
-                .<Either<MocaErrCodes, RoleDto>>map(role -> {
-                    context.clear();
-                    return Either.right(RoleDto.from(role));
-                })
-                .orElseGet(() -> Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR));
+        Either<MocaErrCodes, RoleDto> result = roleContext.get().map(RoleDto::from);
+        context.clear();
+        return result;
     }
 }
