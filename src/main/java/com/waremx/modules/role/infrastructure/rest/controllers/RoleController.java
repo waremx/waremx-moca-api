@@ -258,6 +258,6 @@ public class RoleController {
     public Response updateRole(@PathParam("name") String name, @Valid UpdateRoleDto updateRoleDto) {
         return this.updateRoleService.update(name, updateRoleDto)
                 .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.UPDATE_ROLE, roleDto))
-                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/" + name));
+                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/update/" + name));
     }
 }

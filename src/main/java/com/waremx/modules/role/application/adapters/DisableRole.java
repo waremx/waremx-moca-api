@@ -7,7 +7,7 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.handlers.FilterInputHandler;
+import com.waremx.modules.role.domain.handlers.FilterInputRoleHandler;
 import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
 import com.waremx.modules.role.domain.handlers.ToDisableRoleHandler;
 import com.waremx.modules.role.domain.objects.Role;
@@ -43,7 +43,7 @@ public class DisableRole implements DisableService<String, RoleDto> {
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), name));
 
         Context<Role, MocaErrCodes> last = Handler.link(
-                new FilterInputHandler(DISABLE_ROLE.getEvent()),
+                new FilterInputRoleHandler(DISABLE_ROLE.getEvent()),
                 new GetRoleByNameHandler(roleRepository, GET_ROLE_BY.getEvent()),
                 new ToDisableRoleHandler(roleRepository, DISABLE_ROLE.getEvent())
         )

@@ -8,27 +8,32 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
 
 @AllArgsConstructor
-public class FilterInputHandler extends Handler<Role, MocaErrCodes> {
+public class FilterInputRoleHandler extends Handler<Role, MocaErrCodes> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FilterInputHandler.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilterInputRoleHandler.class);
     private String event;
 
     @Override
     public Handler<Role, MocaErrCodes> execute(Context<Role, MocaErrCodes> context) {
 
-        if (Objects.isNull(context)) {
+        if (context == null) {
             LOGGER.info("The [FilterInputHandler] handler was not executed");
             return checkNext(null);
         }
 
         String[] words = context.<String>get(INPUT_ROLE_NAME.getKey()).orElseThrow().split("_");
+
+        if ((words.length == 2 && words[0].isBlank()) || (words[0].length() < 3)) {
+            LOGGER.error("[ERROR]: This role does not have a valid name format");
+            context.err(MocaErrCodes.ROLE_FORMAT_ERROR);
+            context.emit(this.event, Optional.empty());
+            return checkNext(null);
+        }
 
         if (!words[words.length - 1].equals("ROLE")) {
             LOGGER.error("[ERROR]: The role name must end with \"_ROLE\"");

@@ -7,7 +7,7 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.handlers.FilterInputHandler;
+import com.waremx.modules.role.domain.handlers.FilterInputRoleHandler;
 import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
 import com.waremx.modules.role.domain.handlers.UpdateRoleHandler;
 import com.waremx.modules.role.domain.objects.Role;
@@ -45,7 +45,7 @@ public class UpdateRole implements UpdateService<String, UpdateRoleDto, RoleDto>
         context.set(Prop.bind(INPUT_UPDATE_ROLE_DTO.getKey(), updateRoleDto));
 
         Context<Role, MocaErrCodes> last = Handler.link(
-                new FilterInputHandler(CREATE_ROLE.getEvent()),
+                new FilterInputRoleHandler(CREATE_ROLE.getEvent()),
                 new GetRoleByNameHandler(roleRepository, UPDATE_ROLE.getEvent()),
                 new UpdateRoleHandler(roleRepository, UPDATE_ROLE.getEvent())
         )

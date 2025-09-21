@@ -28,7 +28,7 @@ public abstract class Handler<T, E> {
 
     protected final Handler<T, E> checkNext(final Context<T, E> context) {
         if (context == null) {
-            LOGGER.error("[ERROR]: {}", this.getClass().getSimpleName());
+            LOGGER.error("[ERROR]: The request was stopped by the handler. [{}]", this.getClass().getSimpleName());
             return this;
         }
         if (this.next == null) {

@@ -1,14 +1,19 @@
 package com.waremx.modules.role.domain.contexts;
 
+import com.waremx.common.core.errors.MocaErrCodes;
 import com.waremx.common.mox.listeners.Observe;
 import com.waremx.modules.role.domain.objects.Role;
 
+import io.vavr.control.Either;
+import lombok.Getter;
+
 import java.util.Optional;
 
-
+@Getter
 public class RoleContext implements Observe<Optional<Role>> {
 
     private Optional<Role> result;
+    private Either<MocaErrCodes, Role> role;
 
     @Override
     public void update(Optional<Role> event) {
