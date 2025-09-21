@@ -10,6 +10,7 @@ public enum RoleEvents {
     UPDATE_ROLE("update_role"),
     DISABLE_ROLE("disable_role"),
     ENABLE_ROLE("enable_role"),
+    LIST_ROLE("list_role"),
     ;
 
     private final String event;

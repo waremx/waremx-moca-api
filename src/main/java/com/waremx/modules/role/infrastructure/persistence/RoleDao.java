@@ -15,6 +15,8 @@ import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -92,6 +94,30 @@ public class RoleDao implements RoleRepository {
             return this.findRoleByName(role.getName());
         } catch (ConstraintViolationException e) {
             return Either.left(MocaErrCodes.ROLE_VALUE_ALREADY_EXISTS);
+        } catch (Exception e) {
+            return Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Either<MocaErrCodes, List<Role>> findAll(int limit, int offset) {
+        try {
+            List<Object[]> rows = this.entityManager.createNativeQuery(PgQueryFactory.ROLE_PAGINATION)
+                    .setParameter(PgQueryFactory.PARAM_ROLE_LIMIT, limit)
+                    .setParameter(PgQueryFactory.PARAM_ROLE_OFFSET, offset)
+                    .getResultList();
+
+            if (rows.isEmpty()) {
+                return Either.right(new ArrayList<>());
+            }
+
+            List<Role> roles = rows.stream()
+                    .map(this::toRole)
+                    .toList();
+
+            return Either.right(roles);
+
         } catch (Exception e) {
             return Either.left(MocaErrCodes.INTERNAL_SERVER_ERROR);
         }

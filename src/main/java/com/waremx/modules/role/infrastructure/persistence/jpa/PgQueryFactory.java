@@ -35,10 +35,16 @@ public class PgQueryFactory {
             "where role_tx_name = :name";
 
     public static final String ROLE_PAGINATION = "select role_id as roleId, " +
+            "role_tx_name as name, " +
+            "role_tx_display_name as displayName, " +
+            "role_tx_created_by as createdBy, " +
+            "role_tx_updated_by as updatedBy, " +
             "role_dt_created_at as createdAt, " +
             "role_dt_updated_at as updatedAt, " +
-            "role_st_is_active as isActive " +
-            "from t_moca_roles " +
+            "role_st_is_active as isActive, " +
+            "role_st_is_protected as isProtected " +
+            "from moca.t_moca_roles " +
+            "where role_st_is_active = true " +
             "limit coalesce(:limit, 10) " +
             "offset coalesce(:offset, 0);";
 

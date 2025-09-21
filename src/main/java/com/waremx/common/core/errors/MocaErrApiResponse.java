@@ -90,4 +90,34 @@ public class MocaErrApiResponse {
             ]
         }
     """;
+
+    public static final String INVALID_QUERY_PARAMS = """
+        {
+            "path": "/api/resource",
+            "timestamp": "2019-09-16T22:14:45.624+0000",
+            "errors": [
+                {
+                    "mocaErrorCode": "MOCA-MOD-ERR00X",
+                    "code": 400,
+                    "status": "Bad Request",
+                    "message": "Oops... Something went wrong. Invalid query parameters (e.g. negative limit/offset)"
+                }
+            ]
+        }
+    """;
+
+    public static final String ERROR_LIST_ROLES = """
+        {
+            "path": "/api/resource",
+            "timestamp": "2019-09-16T22:14:45.624+0000",
+            "errors": [
+                {
+                    "mocaErrorCode": "MOCA-MOD-ERR00X",
+                    "code": 500,
+                    "status": "Internal Server Error",
+                    "message": "Oops... Something went wrong"
+                }
+            ]
+        }
+    """;
 }

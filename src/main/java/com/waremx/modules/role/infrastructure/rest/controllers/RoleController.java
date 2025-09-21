@@ -3,6 +3,7 @@ package com.waremx.modules.role.infrastructure.rest.controllers;
 import com.waremx.common.application.services.CreateService;
 import com.waremx.common.application.services.DisableService;
 import com.waremx.common.application.services.GetByService;
+import com.waremx.common.application.services.ListService;
 import com.waremx.common.application.services.UpdateService;
 import com.waremx.common.core.entities.MocaApiResponse;
 import com.waremx.common.core.entities.MocaResponse;
@@ -18,6 +19,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.ExampleObject;
@@ -30,15 +32,14 @@ public class RoleController {
 
     @Inject
     private CreateService<CreateRoleDto, RoleDto> createRoleService;
-
     @Inject
     private GetByService<String, RoleDto> getRoleByNameService;
-
     @Inject
     private DisableService<String, RoleDto> disableRoleService;
-
     @Inject
     private UpdateService<String, UpdateRoleDto, RoleDto> updateRoleService;
+    @Inject
+    private ListService<RoleDto> listRolesService;
 
     @POST()
     @Path("/create")
@@ -259,5 +260,63 @@ public class RoleController {
         return this.updateRoleService.update(name, updateRoleDto)
                 .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.UPDATE_ROLE, roleDto))
                 .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/update/" + name));
+    }
+
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "List all active roles",
+            description = "Retrieve a paginated list of active roles"
+    )
+    @APIResponse(
+            responseCode = "200",
+            description = "Roles retrieved successfully",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MocaResponse.class),
+                    examples = {
+                            @ExampleObject(
+                                    name = "Roles List",
+                                    value = MocaApiResponse.ROLE_LIST_RESPONSE
+                            )
+                    }
+            )
+    )
+    @APIResponse(
+            responseCode = "400",
+            description = "Invalid query parameters (e.g. negative limit/offset)",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MocaErrResponse.class),
+                    examples = {
+                            @ExampleObject(
+                                    name = "Invalid Query Params",
+                                    value = MocaErrApiResponse.INVALID_QUERY_PARAMS
+                            )
+                    }
+            )
+    )
+    @APIResponse(
+            responseCode = "500",
+            description = "Internal server error while listing roles",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MocaErrResponse.class),
+                    examples = {
+                            @ExampleObject(
+                                    name = "Error Listing Roles",
+                                    value = MocaErrApiResponse.ERROR_LIST_ROLES
+                            )
+                    }
+            )
+    )
+    public Response listAllActiveRoles(
+        @QueryParam("limit") @DefaultValue("10") int limit,
+        @QueryParam("offset") @DefaultValue("0") int offset
+    ) {
+        return this.listRolesService.list(limit, offset)
+                .map(list -> MocaResponseMapper.toResponse(MocaResponseCodes.LIST_ROLES, list))
+                .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/all"));
     }
 }

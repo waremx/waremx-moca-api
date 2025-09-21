@@ -18,7 +18,7 @@ import static com.waremx.modules.role.domain.enums.RoleEvents.ENABLE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleEvents.UPDATE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
 
- @AllArgsConstructor
+@AllArgsConstructor
 public class GetRoleByNameHandler extends Handler<Role, MocaErrCodes> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetRoleByNameHandler.class);

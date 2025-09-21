@@ -8,5 +8,5 @@ public interface Observe<U> {
      */
     void update(U event);
 
-    U get();
+    <T> U get();
 }
