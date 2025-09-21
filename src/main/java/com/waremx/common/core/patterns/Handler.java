@@ -22,13 +22,13 @@ public abstract class Handler<T, E> {
         return first;
     }
 
-    public final Context build() {
+    public final Context<T, E> build() {
         return this.context;
     }
 
     protected final Handler<T, E> checkNext(final Context<T, E> context) {
         if (context == null) {
-            LOGGER.error("[ERROR]: {}", this.getClass().getSimpleName());
+            LOGGER.error("[ERROR]: The request was stopped by the handler. [{}]", this.getClass().getSimpleName());
             return this;
         }
         if (this.next == null) {

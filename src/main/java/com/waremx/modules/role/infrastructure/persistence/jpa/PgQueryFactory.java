@@ -16,6 +16,9 @@ public class PgQueryFactory {
     public static  final String PARAM_ROLE_LIMIT = "limit";
     public static  final String PARAM_ROLE_OFFSET = "offset";
     public static  final String PARAM_ROLE_NAME = "name";
+    public static  final String PARAM_ROLE_NAME_VAL = "roleName";
+    public static  final String PARAM_ROLE_DISPLAY_NAME = "displayName";
+    public static  final String PARAM_ROLE_IS_PROTECTED = "isProtected";
     public static  final String PARAM_ROLE_UPDATED_AT = "now";
     public static  final String PARAM_ROLE_UPDATED_BY = "by";
 
@@ -44,5 +47,26 @@ public class PgQueryFactory {
             "role_st_is_active = false, " +
             "role_tx_updated_by = :by, " +
             "role_dt_updated_at = :now " +
+            "where role_tx_name = :name";
+
+    public static final String UPDATE_ROLE = "update " +
+            "moca.t_moca_roles set " +
+            "role_tx_name = :roleName, " +
+            "role_tx_display_name = :displayName, " +
+            "role_st_is_protected = :isProtected, " +
+            "role_tx_updated_by = :by, " +
+            "role_dt_updated_at = :now " +
+            "where role_tx_name = :name";
+
+    public static final String DISPLAY_NAMES = "select role_id as roleId, " +
+            "role_tx_name as name, " +
+            "role_tx_display_name as displayName, " +
+            "role_tx_created_by as createdBy, " +
+            "role_tx_updated_by as updatedBy, " +
+            "role_dt_created_at as createdAt, " +
+            "role_dt_updated_at as updatedAt, " +
+            "role_st_is_active as isActive, " +
+            "role_st_is_protected as isProtected " +
+            "from moca.t_moca_roles " +
             "where role_tx_name = :name";
 }

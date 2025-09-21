@@ -28,7 +28,7 @@ import java.util.Optional;
 @ToString
 public class Context<T, E> implements Subject {
     private final Map<String, Prop<?>> props = new HashMap<>();
-    private final Map<String, Observe> listeners = new HashMap<>();
+    private final Map<String, Observe<?>> listeners = new HashMap<>();
     private T result;
     private E err;
 
@@ -124,7 +124,7 @@ public class Context<T, E> implements Subject {
      * @since 1.0
      */
     @Override
-    public void subscribe(String event, Observe listener) {
+    public void subscribe(String event, @SuppressWarnings("rawtypes") Observe listener) {
         this.listeners.put(event, listener);
     }
 
@@ -152,6 +152,7 @@ public class Context<T, E> implements Subject {
      *
      * @since 1.0
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public final <U> void emit(String event, U obj) {
         set(Prop.bind("result", obj));
@@ -160,6 +161,7 @@ public class Context<T, E> implements Subject {
         listener.ifPresent(observe -> observe.update(obj));
     }
 
+    @SuppressWarnings("unchecked")
     public final <U> U result() {
         return (U) this.result;
     }

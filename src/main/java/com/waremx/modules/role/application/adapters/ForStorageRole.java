@@ -7,7 +7,7 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.handlers.FilterInputHandler;
+import com.waremx.modules.role.domain.handlers.FilterInputRoleHandler;
 import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
 import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.modules.role.domain.handlers.CreateRoleHandler;
@@ -44,8 +44,8 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
         context.set(Prop.bind(INPUT_CREATE_ROLE_DTO.getKey(), createRoleDto));
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), createRoleDto.getName()));
 
-        Context last = Handler.link(
-                new FilterInputHandler(CREATE_ROLE.getEvent()),
+        Context<Role, MocaErrCodes> last = Handler.link(
+                new FilterInputRoleHandler(CREATE_ROLE.getEvent()),
                 new GetRoleByNameHandler(roleRepository, CREATE_ROLE.getEvent()),
                 new CreateRoleHandler(roleRepository)
         )

@@ -8,7 +8,7 @@ public interface Subject {
      *
      * @since 1.0
      */
-    void subscribe(String event, Observe listener);
+    void subscribe(String event, Observe<?> listener);
 
     /**
      * Unregisters a listener from a specific event type.

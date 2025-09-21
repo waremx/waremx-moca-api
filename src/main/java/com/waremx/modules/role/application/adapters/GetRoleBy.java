@@ -7,7 +7,7 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.handlers.FilterInputHandler;
+import com.waremx.modules.role.domain.handlers.FilterInputRoleHandler;
 import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
 import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.modules.role.infrastructure.rest.dtos.RoleDto;
@@ -42,8 +42,8 @@ public class GetRoleBy implements GetByService<String, RoleDto> {
         context.set(Prop.bind(EVENT.getEvent(), GET_ROLE_BY.getEvent()));
         context.set(Prop.bind(INPUT_ROLE_NAME.getKey(), roleName));
 
-        Context last = Handler.link(
-               new FilterInputHandler(GET_ROLE_BY.getEvent()),
+        Context<Role, MocaErrCodes> last = Handler.link(
+               new FilterInputRoleHandler(GET_ROLE_BY.getEvent()),
                new GetRoleByNameHandler(roleRepository, GET_ROLE_BY.getEvent())
         )
                 .execute(context)
