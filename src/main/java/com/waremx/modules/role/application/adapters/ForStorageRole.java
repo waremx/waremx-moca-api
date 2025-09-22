@@ -19,8 +19,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
-
 import static com.waremx.modules.role.domain.enums.RoleEvents.CREATE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_CREATE_ROLE_DTO;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
@@ -52,7 +50,7 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
                 .execute(context)
                 .build();
 
-        if (Objects.isNull(last)) {
+        if (last == null) {
             LOGGER.error("[ERROR]: The request could not be processed. Failed in the adapter. [ForStorageRole]");
             context.clear();
             return Either.left(context.err());

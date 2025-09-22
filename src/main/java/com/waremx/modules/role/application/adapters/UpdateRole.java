@@ -19,8 +19,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
-
 import static com.waremx.modules.role.domain.enums.RoleEvents.UPDATE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_UPDATE_ROLE_DTO;
@@ -51,7 +49,7 @@ public class UpdateRole implements UpdateService<String, UpdateRoleDto, RoleDto>
                 .execute(context)
                 .build();
 
-        if (Objects.isNull(last)) {
+        if (last == null) {
             LOGGER.error("[ERROR]: The request could not be processed. Failed in the adapter. [UpdateRole]");
             context.clear();
             return Either.left(context.err());
