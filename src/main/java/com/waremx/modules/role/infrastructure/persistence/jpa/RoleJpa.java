@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = PgQueryFactory.ROLE_TABLE_NAME, schema = PgQueryFactory.ROLE_SCHEMA_NAME)
+@Table(name = PgQueryFactory.ROLE_TABLE_NAME, schema = PgQueryFactory.SCHEMA_NAME)
 public class RoleJpa {
 
     @Id
@@ -28,22 +28,22 @@ public class RoleJpa {
     @Column(name = PgQueryFactory.ROLE_DISPLAY_NAME, nullable = false)
     private String displayName;
 
-    @Column(name = PgQueryFactory.CREATED_BY, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_CREATED_BY, nullable = false)
     private String createdBy;
 
-    @Column(name = PgQueryFactory.UPDATED_BY, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_UPDATED_BY, nullable = false)
     private String updatedBy;
 
-    @Column(name = PgQueryFactory.CREATED_AT, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_CREATED_AT, nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = PgQueryFactory.UPDATED_AT, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_UPDATED_AT, nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = PgQueryFactory.IS_ACTIVE, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_IS_ACTIVE, nullable = false)
     private Boolean isActive;
 
-    @Column(name = PgQueryFactory.IS_PROTECTED, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_IS_PROTECTED, nullable = false)
     private Boolean isProtected;
 
     public static RoleJpa fromEntity(Role role) {

@@ -139,7 +139,7 @@ public class RoleController {
     )
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("name") String name) {
-        return this.getRoleByNameService.getByService(name)
+        return this.getRoleByNameService.getService(name)
                 .map(roleDto -> MocaResponseMapper.toResponse(MocaResponseCodes.GET_ROLE_BY_NAME, roleDto))
                 .getOrElseGet(mocaErrCodes -> MocaResponseMapper.toErr(mocaErrCodes, "/v1/roles/" + name));
     }

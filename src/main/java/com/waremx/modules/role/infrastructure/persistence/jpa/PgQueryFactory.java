@@ -1,17 +1,24 @@
 package com.waremx.modules.role.infrastructure.persistence.jpa;
 
 public class PgQueryFactory {
+    public static final String SCHEMA_NAME = "moca";
+
+    public static final String MODULE_TABLE_NAME = "t_moca_modules";
+    public static final String MODULE_ID = "module_id";
+    public static final String MODULE_DISPLAY_NAME = "mod_tx_display_name";
+    public static final String MODULE_DESCRIPTION = "mod_tx_description";
+    public static final String MODULE_IS_ACTIVE = "mod_st_is_active";
+
     public static final String ROLE_TABLE_NAME = "t_moca_roles";
-    public static final String ROLE_SCHEMA_NAME = "moca";
     public static final String ROLE_ID = "role_id";
     public static final String ROLE_NAME = "role_tx_name";
     public static final String ROLE_DISPLAY_NAME = "role_tx_display_name";
-    public static final String CREATED_BY = "role_tx_created_by";
-    public static final String UPDATED_BY = "role_tx_updated_by";
-    public static final String CREATED_AT = "role_dt_created_at";
-    public static final String UPDATED_AT = "role_dt_updated_at";
-    public static final String IS_ACTIVE = "role_st_is_active";
-    public static final String IS_PROTECTED = "role_st_is_protected";
+    public static final String ROLE_CREATED_BY = "role_tx_created_by";
+    public static final String ROLE_UPDATED_BY = "role_tx_updated_by";
+    public static final String ROLE_CREATED_AT = "role_dt_created_at";
+    public static final String ROLE_UPDATED_AT = "role_dt_updated_at";
+    public static final String ROLE_IS_ACTIVE = "role_st_is_active";
+    public static final String ROLE_IS_PROTECTED = "role_st_is_protected";
 
     public static  final String PARAM_ROLE_LIMIT = "limit";
     public static  final String PARAM_ROLE_OFFSET = "offset";
