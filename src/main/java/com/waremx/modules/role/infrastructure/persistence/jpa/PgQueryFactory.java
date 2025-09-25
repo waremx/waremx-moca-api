@@ -8,6 +8,13 @@ public class PgQueryFactory {
     public static final String MODULE_DISPLAY_NAME = "mod_tx_display_name";
     public static final String MODULE_DESCRIPTION = "mod_tx_description";
     public static final String MODULE_IS_ACTIVE = "mod_st_is_active";
+    public static final String MODULE_CREATED_BY = "mod_tx_created_by";
+    public static final String MODULE_UPDATED_BY = "mod_tx_updated_by";
+    public static final String MODULE_CREATED_AT = "mod_dt_created_at";
+    public static final String MODULE_UPDATED_AT = "mod_dt_updated_at";
+
+    public static final String HUB_ID = "id";
+    public static final String HUB_TABLE_NAME = "t_moca_role_modules_hub";
 
     public static final String ROLE_TABLE_NAME = "t_moca_roles";
     public static final String ROLE_ID = "role_id";

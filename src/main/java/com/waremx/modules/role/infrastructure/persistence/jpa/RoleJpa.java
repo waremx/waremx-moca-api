@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,16 +23,16 @@ public class RoleJpa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short roleId;
 
-    @Column(name = PgQueryFactory.ROLE_NAME, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_NAME, nullable = false, length = 45)
     private String name;
 
-    @Column(name = PgQueryFactory.ROLE_DISPLAY_NAME, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_DISPLAY_NAME, nullable = false, length = 45)
     private String displayName;
 
-    @Column(name = PgQueryFactory.ROLE_CREATED_BY, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_CREATED_BY, nullable = false, length = 45)
     private String createdBy;
 
-    @Column(name = PgQueryFactory.ROLE_UPDATED_BY, nullable = false)
+    @Column(name = PgQueryFactory.ROLE_UPDATED_BY, nullable = false, length = 45)
     private String updatedBy;
 
     @Column(name = PgQueryFactory.ROLE_CREATED_AT, nullable = false)
@@ -45,6 +46,9 @@ public class RoleJpa {
 
     @Column(name = PgQueryFactory.ROLE_IS_PROTECTED, nullable = false)
     private Boolean isProtected;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RoleModuleHubJpa> modules;
 
     public static RoleJpa fromEntity(Role role) {
         return RoleJpa.builder()
