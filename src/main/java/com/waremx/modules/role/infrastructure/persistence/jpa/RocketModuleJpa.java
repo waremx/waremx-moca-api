@@ -45,7 +45,7 @@ public class RocketModuleJpa {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RoleModuleHubJpa> roles;
+    private Set<RoleRocketModuleHubJpa> modules;
 
     public static RocketModuleJpa fromEntity(RocketModule module) {
         return RocketModuleJpa.builder()
@@ -64,12 +64,5 @@ public class RocketModuleJpa {
                 .isActive(this.isActive)
                 .build();
     }
-
-    //En la metadata de 
-    //Asociar el modulo con el role many to many, cuando se crea un nuevo rol, llamar el servicio de detalle e insertar en la tabla HUB
-    //crear endpoint para asociar role con module, insertar en la tabla HUB
-    //endpoint detalle module
-    //Checar la validación already exists, si el rol no existe insertar en ambas role y hub, si el rol ya existe, pero el módulo es diferente, se debería de solo insertar en la tabla HUB,
-    //si ya existe y el rol es el mismo mandar error
 
 }

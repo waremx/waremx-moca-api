@@ -10,6 +10,7 @@ public enum RoleKeys {
     INPUT_UPDATE_ROLE_DTO("input_update_role_dto"),
     INPUT_LIMIT("input_limit"),
     INPUT_OFFSET("input_offset"),
+    INPUT_MODULE_NAME("input_module_name"),
     ;
 
     private final String key;

@@ -48,7 +48,7 @@ public class RoleJpa {
     private Boolean isProtected;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RoleModuleHubJpa> modules;
+    private Set<RoleRocketModuleHubJpa> modules;
 
     public static RoleJpa fromEntity(Role role) {
         return RoleJpa.builder()

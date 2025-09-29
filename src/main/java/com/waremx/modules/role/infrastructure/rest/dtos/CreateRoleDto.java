@@ -10,6 +10,13 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 @Data
 public class CreateRoleDto {
 
+    @NotBlank(message = "Module is mandatory")
+    @NotEmpty(message = "Module can not be empty")
+    @NotNull
+    @JsonProperty
+    @Schema(example = "MOCA")
+    private String module;
+
     @NotBlank(message = "Role name is mandatory")
     @NotEmpty(message = "Role name can not be empty")
     @NotNull

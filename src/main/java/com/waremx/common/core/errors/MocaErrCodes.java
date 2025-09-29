@@ -28,6 +28,11 @@ public enum MocaErrCodes {
     ROLE_VALUE_ALREADY_EXISTS("MOCA-ROLE-ERR009", 400, "Bad Request", "You cannot update the role name or display name with this value because it already exists"),
     ROLE_INVALID_QUERY_PARAMS("MOCA-ROLE-ERR010", 400, "Bad Request", "Invalid query parameters (e.g. negative limit/offset). Values cannot be negative"),
 
+    //Module Error Codes
+    MOD_NOT_FOUND("MOCA-MOD-ERR001", 404, "Not Found", "Module not found"),
+    MOD_INTERNAL_SERVER_ERROR("MOCA-MOD-ERR002", 500, "Internal Server Error", "Oops... Something went wrong. An unexpected error occurred while we were consulting the modules. Please try again later."),
+    MOD_ALREADY_ASSOCIATED("MOCA-MOD-ERR003", 400, "Bad Request", "This role is already associated with this module"),
+
     ;
 
 

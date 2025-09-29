@@ -13,8 +13,15 @@ public class PgQueryFactory {
     public static final String MODULE_CREATED_AT = "mod_dt_created_at";
     public static final String MODULE_UPDATED_AT = "mod_dt_updated_at";
 
-    public static final String HUB_ID = "id";
+    public static final String HUB_ID = "hub_id";
     public static final String HUB_TABLE_NAME = "t_moca_role_modules_hub";
+    public static final String HUB_ROLE_ID = "role_id";
+    public static final String HUB_ROLE_NAME = "hub_role_name";
+    public static final String HUB_MODULE_ID = "module_id";
+    public static final String HUB_CREATED_BY = "hub_tx_created_by";
+    public static final String HUB_UPDATED_BY = "hub_tx_updated_by";
+    public static final String HUB_CREATED_AT = "hub_dt_created_at";
+    public static final String HUB_TAB_UPDATED_AT = "hub_dt_updated_at";
 
     public static final String ROLE_TABLE_NAME = "t_moca_roles";
     public static final String ROLE_ID = "role_id";
@@ -35,6 +42,7 @@ public class PgQueryFactory {
     public static  final String PARAM_ROLE_IS_PROTECTED = "isProtected";
     public static  final String PARAM_ROLE_UPDATED_AT = "now";
     public static  final String PARAM_ROLE_UPDATED_BY = "by";
+    public static  final String PARAM_MODULE_NAME = "module";
 
     public static final String GET_ROLE_BY_NAME = "select role_id as roleId, " +
             "role_tx_name as name, " +
@@ -89,4 +97,18 @@ public class PgQueryFactory {
             "role_st_is_protected as isProtected " +
             "from moca.t_moca_roles " +
             "where role_tx_name = :name";
+
+
+    public static final String GET_MODULE_BY_NAME = "select module_id as moduleId, " +
+            "mod_tx_display_name as displayName, " +
+            "mod_tx_description as description, " +
+            "mod_st_is_active as isActive " +
+            "from moca.t_moca_modules " +
+            "where module_id = :module";
+
+    public static final String GET_ROLE_MODULE_ASSOCIATIONS = "select " +
+            "role_name as name, " +
+            "module_id as moduleId " +
+            "from moca.t_moca_role_modules_hub " +
+            "where role_name = :roleName";
 }
