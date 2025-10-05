@@ -4,7 +4,7 @@ quarkus:
     username: ymoyamac
     password: ymoyamac
     jdbc:
-      url: jdbc:postgresql://localhost:5432/mocadev
+      url: jdbc:postgresql://localhost:5432/moca
 
   hibernate-orm:
     log:

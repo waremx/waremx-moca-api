@@ -4,6 +4,7 @@ public class MocaApiResponse {
     public static final String INSERT =
             "{\n" +
             "  \"name\": \"SOMETHING_ROLE\",\n" +
+            "  \"module\": \"MOCA\",\n" +
             "  \"displayName\": \"Something\",\n" +
             "  \"isProtected\": true\n" +
             "}";

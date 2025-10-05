@@ -1,11 +1,11 @@
-package com.waremx.modules.role.infrastructure.persistence;
+package com.waremx.modules.role.infrastructure.persistence.dao;
 
 import com.waremx.common.core.errors.MocaErrCodes;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.objects.Role;
 import com.waremx.modules.role.infrastructure.persistence.jpa.PgQueryFactory;
 import com.waremx.modules.role.infrastructure.persistence.jpa.RoleJpa;
-import com.waremx.modules.role.infrastructure.persistence.jpa.RoleJpaRepository;
+import com.waremx.modules.role.infrastructure.persistence.repositories.RoleJpaRepository;
 
 import io.vavr.control.Either;
 import jakarta.enterprise.context.ApplicationScoped;

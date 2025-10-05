@@ -30,7 +30,7 @@ public class GetDetailRole implements GetByService<String, RoleDto> {
     private RoleRepository roleRepository;
 
     @Override
-    public Either<MocaErrCodes, RoleDto> getByService(String roleName) {
+    public Either<MocaErrCodes, RoleDto> getService(String roleName) {
 
         LOGGER.info("[EVENT]: {}", GET_ROLE_BY.getEvent());
 

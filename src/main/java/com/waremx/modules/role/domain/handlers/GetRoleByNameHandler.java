@@ -2,6 +2,7 @@ package com.waremx.modules.role.domain.handlers;
 
 import com.waremx.common.core.errors.MocaErrCodes;
 import com.waremx.common.core.patterns.Handler;
+import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RoleRepository;
 import com.waremx.modules.role.domain.objects.Role;
@@ -37,8 +38,8 @@ public class GetRoleByNameHandler extends Handler<Role, MocaErrCodes> {
 
         if (found.isRight() && this.event.equals(CREATE_ROLE.getEvent())) {
             LOGGER.error("[ERROR]: This role already exists: {}", name);
-            context.err(found.getLeft());
-            return checkNext(null);
+            context.set(Prop.bind("role", found.get()));
+            return checkNext(context);
         }
 
         if (found.isRight() && found.get().getIsActive().equals(Boolean.FALSE)) {

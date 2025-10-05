@@ -18,8 +18,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
-
 import static com.waremx.modules.role.domain.enums.RoleEvents.DISABLE_ROLE;
 import static com.waremx.modules.role.domain.enums.RoleEvents.GET_ROLE_BY;
 import static com.waremx.modules.role.domain.enums.RoleKeys.INPUT_ROLE_NAME;
@@ -50,7 +48,7 @@ public class DisableRole implements DisableService<String, RoleDto> {
                 .execute(context)
                 .build();
 
-        if (Objects.isNull(last)) {
+        if (last == null) {
             LOGGER.error("[ERROR]: The request could not be processed. Failed in the adapter. [DisableRole]");
             context.clear();
             return Either.left(context.err());

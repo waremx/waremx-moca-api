@@ -1,17 +1,38 @@
 package com.waremx.modules.role.infrastructure.persistence.jpa;
 
 public class PgQueryFactory {
+    public static final String SCHEMA_NAME = "moca";
+
+    public static final String MODULE_TABLE_NAME = "t_moca_modules";
+    public static final String MODULE_ID = "module_id";
+    public static final String MODULE_DISPLAY_NAME = "mod_tx_display_name";
+    public static final String MODULE_DESCRIPTION = "mod_tx_description";
+    public static final String MODULE_IS_ACTIVE = "mod_st_is_active";
+    public static final String MODULE_CREATED_BY = "mod_tx_created_by";
+    public static final String MODULE_UPDATED_BY = "mod_tx_updated_by";
+    public static final String MODULE_CREATED_AT = "mod_dt_created_at";
+    public static final String MODULE_UPDATED_AT = "mod_dt_updated_at";
+
+    public static final String HUB_ID = "hub_id";
+    public static final String HUB_TABLE_NAME = "t_moca_role_modules_hub";
+    public static final String HUB_ROLE_ID = "role_id";
+    public static final String HUB_ROLE_NAME = "hub_role_name";
+    public static final String HUB_MODULE_ID = "module_id";
+    public static final String HUB_CREATED_BY = "hub_tx_created_by";
+    public static final String HUB_UPDATED_BY = "hub_tx_updated_by";
+    public static final String HUB_CREATED_AT = "hub_dt_created_at";
+    public static final String HUB_TAB_UPDATED_AT = "hub_dt_updated_at";
+
     public static final String ROLE_TABLE_NAME = "t_moca_roles";
-    public static final String ROLE_SCHEMA_NAME = "moca";
     public static final String ROLE_ID = "role_id";
     public static final String ROLE_NAME = "role_tx_name";
     public static final String ROLE_DISPLAY_NAME = "role_tx_display_name";
-    public static final String CREATED_BY = "role_tx_created_by";
-    public static final String UPDATED_BY = "role_tx_updated_by";
-    public static final String CREATED_AT = "role_dt_created_at";
-    public static final String UPDATED_AT = "role_dt_updated_at";
-    public static final String IS_ACTIVE = "role_st_is_active";
-    public static final String IS_PROTECTED = "role_st_is_protected";
+    public static final String ROLE_CREATED_BY = "role_tx_created_by";
+    public static final String ROLE_UPDATED_BY = "role_tx_updated_by";
+    public static final String ROLE_CREATED_AT = "role_dt_created_at";
+    public static final String ROLE_UPDATED_AT = "role_dt_updated_at";
+    public static final String ROLE_IS_ACTIVE = "role_st_is_active";
+    public static final String ROLE_IS_PROTECTED = "role_st_is_protected";
 
     public static  final String PARAM_ROLE_LIMIT = "limit";
     public static  final String PARAM_ROLE_OFFSET = "offset";
@@ -21,6 +42,7 @@ public class PgQueryFactory {
     public static  final String PARAM_ROLE_IS_PROTECTED = "isProtected";
     public static  final String PARAM_ROLE_UPDATED_AT = "now";
     public static  final String PARAM_ROLE_UPDATED_BY = "by";
+    public static  final String PARAM_MODULE_ID = "moduleId";
 
     public static final String GET_ROLE_BY_NAME = "select role_id as roleId, " +
             "role_tx_name as name, " +
@@ -75,4 +97,24 @@ public class PgQueryFactory {
             "role_st_is_protected as isProtected " +
             "from moca.t_moca_roles " +
             "where role_tx_name = :name";
+
+
+    public static final String GET_MODULE_BY_NAME = "select module_id as moduleId, " +
+            "mod_tx_display_name as displayName, " +
+            "mod_tx_description as description, " +
+            "mod_st_is_active as isActive " +
+            "from moca.t_moca_modules " +
+            "where module_id = :moduleId";
+
+    public static final String GET_ROLE_MODULE_ASSOCIATIONS = "select hub_id as id, " +
+            "role_id as roleId, " +
+            "module_id as moduleId, " +
+            "hub_role_name as name, " +
+            "hub_tx_created_by as createdBy, " +
+            "hub_tx_updated_by as updatedBy, " +
+            "hub_dt_created_at as createdAt, " +
+            "hub_dt_updated_at as updatedAt " +
+            "from moca.t_moca_role_modules_hub " +
+            "where hub_role_name = :roleName " +
+            "and module_id = :moduleId;";
 }
