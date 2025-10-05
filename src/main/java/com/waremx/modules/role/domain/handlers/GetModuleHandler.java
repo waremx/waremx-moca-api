@@ -40,8 +40,6 @@ public class GetModuleHandler extends Handler<Role, MocaErrCodes> {
 
         context.set(Prop.bind("module", found.get()));
 
-        LOGGER.info("[Module]: {}", found.get());
-
         return checkNext(context);
     }
 }

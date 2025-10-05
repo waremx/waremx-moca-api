@@ -20,7 +20,7 @@ public class RocketModuleDao implements RocketModuleRepository {
     public Either<MocaErrCodes, RocketModule> findModuleByName(String module) {
         try {
             Object[] row = (Object[]) this.entityManager.createNativeQuery(PgQueryFactory.GET_MODULE_BY_NAME)
-                    .setParameter(PgQueryFactory.PARAM_MODULE_NAME, module)
+                    .setParameter(PgQueryFactory.PARAM_MODULE_ID, module)
                     .getSingleResult();
 
             RocketModule found = RocketModule.builder()

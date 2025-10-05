@@ -42,7 +42,7 @@ public class PgQueryFactory {
     public static  final String PARAM_ROLE_IS_PROTECTED = "isProtected";
     public static  final String PARAM_ROLE_UPDATED_AT = "now";
     public static  final String PARAM_ROLE_UPDATED_BY = "by";
-    public static  final String PARAM_MODULE_NAME = "module";
+    public static  final String PARAM_MODULE_ID = "moduleId";
 
     public static final String GET_ROLE_BY_NAME = "select role_id as roleId, " +
             "role_tx_name as name, " +
@@ -104,11 +104,17 @@ public class PgQueryFactory {
             "mod_tx_description as description, " +
             "mod_st_is_active as isActive " +
             "from moca.t_moca_modules " +
-            "where module_id = :module";
+            "where module_id = :moduleId";
 
-    public static final String GET_ROLE_MODULE_ASSOCIATIONS = "select " +
-            "role_name as name, " +
-            "module_id as moduleId " +
+    public static final String GET_ROLE_MODULE_ASSOCIATIONS = "select hub_id as id, " +
+            "role_id as roleId, " +
+            "module_id as moduleId, " +
+            "hub_role_name as name, " +
+            "hub_tx_created_by as createdBy, " +
+            "hub_tx_updated_by as updatedBy, " +
+            "hub_dt_created_at as createdAt, " +
+            "hub_dt_updated_at as updatedAt " +
             "from moca.t_moca_role_modules_hub " +
-            "where role_name = :roleName";
+            "where hub_role_name = :roleName " +
+            "and module_id = :moduleId;";
 }

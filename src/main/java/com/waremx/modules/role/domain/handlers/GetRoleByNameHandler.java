@@ -39,9 +39,6 @@ public class GetRoleByNameHandler extends Handler<Role, MocaErrCodes> {
         if (found.isRight() && this.event.equals(CREATE_ROLE.getEvent())) {
             LOGGER.error("[ERROR]: This role already exists: {}", name);
             context.set(Prop.bind("role", found.get()));
-            //Hacer un return del contexto para que se ejecute el siguiente handler y validar la relacion entre el role y modulo
-            //Si el role ya existe y esta asociado al mismo modulo que se mando por el DTO mandar el error de "este role ya existe"
-            //Si no existe insertar en la tabla hub
             return checkNext(context);
         }
 

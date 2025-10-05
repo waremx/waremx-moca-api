@@ -27,6 +27,13 @@ public class CreateRoleHandler extends Handler<Role, MocaErrCodes> {
     @Override
     public Handler<Role, MocaErrCodes> execute(Context<Role, MocaErrCodes> context) {
 
+        //salta si solo hay que crear una asociaion checkNext(context)
+
+        if (context.<Role>get("role").isPresent()) {
+            LOGGER.info("[INFO]: CreateRoleHandler, This role already exists");
+            return checkNext(context);
+        }
+
         LOGGER.info("[HANDLER]: CreateRoleHandler");
 
         CreateRoleDto createRoleDto = context.<CreateRoleDto>get(INPUT_CREATE_ROLE_DTO.getKey()).orElseThrow();

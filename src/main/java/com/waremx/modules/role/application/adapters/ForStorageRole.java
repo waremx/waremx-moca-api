@@ -7,12 +7,10 @@ import com.waremx.common.mox.core.Prop;
 import com.waremx.common.mox.uni.Context;
 import com.waremx.modules.role.application.repositories.RocketModuleRepository;
 import com.waremx.modules.role.application.repositories.RoleRepository;
+import com.waremx.modules.role.application.repositories.RoleRocketModuleHubRepository;
 import com.waremx.modules.role.domain.contexts.RoleContext;
-import com.waremx.modules.role.domain.handlers.FilterInputRoleHandler;
-import com.waremx.modules.role.domain.handlers.GetModuleHandler;
-import com.waremx.modules.role.domain.handlers.GetRoleByNameHandler;
+import com.waremx.modules.role.domain.handlers.*;
 import com.waremx.modules.role.domain.objects.Role;
-import com.waremx.modules.role.domain.handlers.CreateRoleHandler;
 import com.waremx.modules.role.infrastructure.rest.dtos.CreateRoleDto;
 import com.waremx.modules.role.infrastructure.rest.dtos.RoleDto;
 import io.vavr.control.Either;
@@ -35,7 +33,10 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
     private RoleRepository roleRepository;
 
     @Inject
-    private RocketModuleRepository rocketModuleRepository;
+    private RoleRocketModuleHubRepository roleRocketModuleHubRepository;
+
+     @Inject
+     private RocketModuleRepository rocketModuleRepository;
 
     @Override
     public Either<MocaErrCodes, RoleDto> create(CreateRoleDto createRoleDto) {
@@ -53,11 +54,9 @@ public class ForStorageRole implements CreateService<CreateRoleDto, RoleDto> {
                 new FilterInputRoleHandler(),
                 new GetRoleByNameHandler(roleRepository, CREATE_ROLE.getEvent()),
                 new GetModuleHandler(rocketModuleRepository),
-                //obtener el modulo
-                //validar el role y el modulo si estan asociados -> Aquí termina la ejecución de la petición, si el role ya existe y ya esta asociado al modulo
-                //Tu role que estas tratando de crear ya esta asociado a un modulo?
-                //insertar en la tabla hub si cumple la condicion -> Aquí termina la ejecucion de esta peticion, si el role ya existe, pero no esta asociado al modulo que mandaron por el DTO
-                new CreateRoleHandler(roleRepository) // -> Este handler solo se ejecuta si el role no existe en la tabla "roles" y no esta asociado a ningun modulo, es nuevo
+                new ValidateRoleAndModuleHandler(roleRocketModuleHubRepository),
+                new CreateRoleHandler(roleRepository),
+                new CreateAssociationRoleModuleHandler(roleRocketModuleHubRepository)
         )
                 .execute(context)
                 .build();
